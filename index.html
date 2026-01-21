@@ -1,27 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Template Hub - Your One-Stop Solution</title>
     <style>
-        /* (CSS omitted in this query for brevity) */
+        /* Core CSS variables and layout */
+        :root{
+            --primary-color:#6366f1;
+            --secondary-color:#8b5cf6;
+            --accent-color:#ec4899;
+            --dark-bg:#0f172a;
+            --light-bg:#f8fafc;
+            --text-dark:#0f172a;
+            --text-light:#64748b;
+            --white:#ffffff;
+            --card-bg: #ffffff;
+        }
+
+        html,body{
+            height:100%;
+            margin:0;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            background: var(--light-bg);
+            color: var(--text-dark);
+        }
+
+        /* Buttons */
+        .btn{
+            background: transparent;
+            border: 1px solid rgba(15,23,42,0.06);
+            padding:8px 12px;
+            border-radius:8px;
+            cursor:pointer;
+            font-weight:600;
+        }
+        .btn-primary{
+            background:var(--primary-color);
+            color:var(--white);
+            border: none;
+        }
+        .btn-danger{
+            background: #fee2e2;
+            color: #991b1b;
+            border: none;
+        }
+
+        /* chips */
+        .chip{
+            padding:6px 10px;
+            border-radius:999px;
+            background: #f1f5f9;
+            border:1px solid rgba(15,23,42,0.03);
+            cursor:pointer;
+            font-size:0.9rem;
+        }
+        .chip.active{
+            background: linear-gradient(90deg,var(--primary-color),var(--secondary-color));
+            color: white;
+            box-shadow: 0 6px 18px rgba(99,102,241,0.12);
+        }
+
+        /* grid and cards */
+        .container{ max-width:1200px; margin:0 auto; padding:0 20px; }
+        .template-grid{
+            display:grid;
+            grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
+            gap:18px;
+        }
+        .template-card{
+            background:var(--card-bg);
+            border-radius:12px;
+            padding:12px;
+            box-shadow: 0 6px 18px rgba(2,6,23,0.04);
+            position:relative;
+            overflow:hidden;
+        }
+        .template-card img{ width:100%; height:160px; object-fit:cover; border-radius:8px; display:block; }
+
+        .tech-badge{ display:inline-block; padding:6px; border-radius:6px; font-size:0.8rem; background:#eef2ff; color:#3730a3; }
+
+        /* modals */
+        .modal{
+            position:fixed;
+            inset:0;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background: rgba(2,6,23,0.45);
+            z-index:2000;
+            padding:20px;
+        }
+        .modal .modal-content{
+            background:var(--white);
+            border-radius:12px;
+            width:100%;
+            max-width:1100px;
+            max-height:96vh;
+            overflow:auto;
+            position:relative;
+        }
+        .close-btn{
+            background:transparent;
+            border:none;
+            font-size:1.4rem;
+            cursor:pointer;
+        }
+
+        /* small UI */
+        input[type="search"], input[type="text"], input[type="url"], select{
+            padding:10px 12px;
+            border-radius:8px;
+            border:1px solid #e6edf3;
+            width:100%;
+            box-sizing:border-box;
+        }
+
+        .item-list{ display:flex; flex-direction:column; gap:8px; }
+        .history-row{ padding:8px; border-radius:8px; background:#f8fafc; display:flex; justify-content:space-between; align-items:center; }
+
+        .badge { background:#eef2ff; color:#3730a3; padding:6px 8px; border-radius:8px; font-weight:600; }
+
+        /* small responsive */
+        @media (max-width: 900px){
+            aside#filterSidebar{ display:none; }
+            .modal .modal-content{ max-width:95%; max-height:95vh; }
+        }
+
+        /* accessibility focus */
+        button:focus, input:focus { outline: 3px solid rgba(99,102,241,0.18); outline-offset:2px; }
+
+        /* autocomplete list */
+        .autocomplete-list{
+            position:absolute;
+            background:white;
+            border:1px solid #e5e7eb;
+            width:100%;
+            border-radius:8px;
+            margin-top:6px;
+            box-shadow:0 8px 24px rgba(2,6,23,0.06);
+            max-height:240px;
+            overflow:auto;
+            z-index:1600;
+        }
+        .autocomplete-item{
+            padding:8px 10px;
+            cursor:pointer;
+        }
+        .autocomplete-item:hover{ background:#f8fafc; }
     </style>
 </head>
 <body>
     <!-- Topbar: Search + Trending -->
-    <header style="background:var(--dark-bg); color:var(--white); position:sticky; top:0; z-index:1200; padding:12px 20px; display:flex; align-items:center; gap:16px;">
+    <header style="background:var(--white); color:var(--text-dark); position:sticky; top:0; z-index:1200; padding:12px 20px; display:flex; align-items:center; gap:16px; border-bottom:1px solid #eef2f6;">
         <div style="font-weight:700; font-size:1.1rem;">Template<span style="color:var(--primary-color);">Hub</span></div>
-        <div style="flex:1; display:flex; gap:8px; align-items:center;">
+        <div style="flex:1; display:flex; gap:8px; align-items:center; position:relative;">
             <input id="searchInput" type="search" placeholder="Search templates, e.g. 'SaaS Landing'" style="flex:1; padding:10px 12px; border-radius:8px; border:1px solid #ccc;" autocomplete="off">
-            <div id="autocomplete" style="position:relative;"></div>
+            <div id="autocomplete" style="position:relative; min-width:200px;"></div>
             <select id="sortSelect" style="padding:10px; border-radius:8px;">
                 <option value="popular">Most Popular</option>
                 <option value="newest">Newest</option>
                 <option value="updated">Recently Updated</option>
                 <option value="toprated">Top Rated</option>
             </select>
-            <button id="openFiltersBtn" class="btn" style="background:transparent; border:1px solid rgba(255,255,255,0.08); color:var(--white);">Filters</button>
+            <button id="openFiltersBtn" class="btn" style="background:transparent; border:1px solid rgba(15,23,42,0.06); color:var(--text-dark);">Filters</button>
             <button id="openDashboardBtn" class="btn btn-primary">My Dashboard</button>
         </div>
         <div style="display:flex; gap:8px;">
@@ -32,7 +174,7 @@
     <main class="container" style="margin-top:18px; display:flex; gap:20px;">
         <!-- Filter Sidebar -->
         <aside id="filterSidebar" style="width:280px;">
-            <div style="background:var(--white); padding:16px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.06);">
+            <div style="background:var(--white); padding:16px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.03);">
                 <h3>Filters</h3>
                 <div style="margin-top:8px;">
                     <label>Tech Stack</label>
@@ -56,7 +198,7 @@
                 </div>
             </div>
             <div style="height:24px"></div>
-            <div style="background:var(--white); padding:12px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.06);">
+            <div style="background:var(--white); padding:12px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.03);">
                 <h4>Trending Searches</h4>
                 <div id="trending" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;"></div>
             </div>
@@ -75,8 +217,8 @@
 
     <!-- Preview Modal -->
     <div id="previewModal" class="modal" style="display:none;">
-        <div class="modal-content">
-            <div style="position:sticky; top:0; background:#fff; display:flex; gap:8px; align-items:center; padding:8px; justify-content:space-between;">
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="previewTitle">
+            <div style="position:sticky; top:0; background:#fff; display:flex; gap:8px; align-items:center; padding:8px; justify-content:space-between; border-bottom:1px solid #eef2f6;">
                 <div style="display:flex; gap:8px; align-items:center;">
                     <strong id="previewTitle"></strong>
                     <span id="previewMeta" style="color:#64748b; font-size:0.9rem;"></span>
@@ -89,7 +231,7 @@
                     </select>
                     <label style="display:flex; gap:6px; align-items:center;"><input type="checkbox" id="themeToggle">Dark</label>
                     <button id="openFullBtn" class="btn btn-primary">Remove Frame</button>
-                    <button class="close-btn" onclick="closePreview()">×</button>
+                    <button class="close-btn" id="closePreviewBtn" aria-label="Close preview">×</button>
                 </div>
             </div>
             <div id="previewHolder" style="padding:1rem; display:flex; justify-content:center;">
@@ -101,7 +243,7 @@
     <!-- Details Modal -->
     <div id="detailsModal" class="modal" style="display:none;">
         <div class="modal-content" style="padding:16px; max-width:900px;">
-            <button class="close-btn" onclick="closeDetails()">×</button>
+            <button class="close-btn" id="closeDetailsBtn" aria-label="Close details">×</button>
             <div id="detailsBody"></div>
         </div>
     </div>
@@ -109,7 +251,7 @@
     <!-- Submission Modal -->
     <div id="submissionModal" class="modal" style="display:none;">
         <div class="modal-content" style="max-width:700px; padding:16px;">
-            <button class="close-btn" onclick="closeSubmission()">×</button>
+            <button class="close-btn" id="closeSubmissionBtn" aria-label="Close submission">×</button>
             <h2>Submit a Template</h2>
             <div class="input-group"><label>Title</label><input id="subTitle" type="text"></div>
             <div class="input-group"><label>Repo URL (GitHub)</label><input id="subRepo" type="url"></div>
@@ -117,21 +259,21 @@
             <div class="input-group"><label>Category</label><input id="subCategory" type="text"></div>
             <div class="input-group"><label>License</label><select id="subLicense"><option>MIT</option><option>Creative Commons</option><option>Paid</option></select></div>
             <div class="input-group"><label>Thumbnail</label><input id="subThumb" type="file" accept="image/*"></div>
-            <div style="display:flex; gap:8px;"><button id="submitTemplateBtn" class="btn btn-primary">Submit</button><button class="btn" onclick="closeSubmission()">Cancel</button></div>
+            <div style="display:flex; gap:8px; margin-top:12px;"><button id="submitTemplateBtn" class="btn btn-primary">Submit</button><button class="btn" id="cancelSubmissionBtn">Cancel</button></div>
         </div>
     </div>
 
     <!-- Dashboard Modal -->
     <div id="dashboardModal" class="modal" style="display:none;">
         <div class="modal-content" style="max-width:900px; padding:16px;">
-            <button class="close-btn" onclick="closeDashboard()">×</button>
+            <button class="close-btn" id="closeDashboardBtn" aria-label="Close dashboard">×</button>
             <h2>My Dashboard</h2>
-            <div style="display:flex; gap:12px;">
-                <div style="flex:1;">
+            <div style="display:flex; gap:12px; flex-direction:column;">
+                <div>
                     <h3>Saved for Later</h3>
                     <div id="favList" class="item-list"></div>
                 </div>
-                <div style="flex:1;">
+                <div>
                     <h3>Download History</h3>
                     <div id="downloadHistory" class="item-list"></div>
                 </div>
@@ -142,19 +284,133 @@
     <footer style="padding:24px; text-align:center; color:var(--text-light);">&copy; 2026 Template Hub</footer>
 
     <script>
-        /* Core styling variables used inline in this demo file. If you separate CSS, keep these variables. */
-        const CSS_VARS = `:root{--primary-color:#6366f1; --secondary-color:#8b5cf6; --accent-color:#ec4899; --dark-bg:#0f172a; --light-bg:#f8fafc; --text-dark:#1e293b; --text-light:#64748b; --white:#ffffff; --success:#10b981; --warning:#f59e0b; --danger:#ef4444;}`;
-        // inject vars to document
-        const styleEl = document.createElement('style'); styleEl.textContent = CSS_VARS; document.head.appendChild(styleEl);
+        // CSS_VARS already injected via <style> above. Continue with JS.
 
-        // Templates metadata (single source of truth for the grid). In a real app this would come from an API.
+        // Mock templates data (single source of truth for the grid). Replace with API in production.
         const templatesData = [
-            { id:'todo', title:'To-Do Tracker', tech:['HTML'], category:'Dashboard', license:'MIT', style:['Minimalist'], rating:4.6, popularity:1250, updated_at:'2026-01-19', created_at:'2025-12-01', previewHTML:`<body style='font-family:system-ui'><h1>To-Do Preview</h1><p>Simple task UI</p></body>`, screenshots:[], repo:'https://github.com/atulzaware51/templatehub', install:'git clone https://github.com/atulzaware51/templatehub.git && cd templatehub', fileTree:{'index.html':{}, 'css':{'main.css':{}}, 'js':{'app.js':{}}}, deps:['None - plain HTML']},
-            { id:'health', title:'Health Tracker', tech:['Vue','Tailwind'], category:'Dashboard', license:'Creative Commons', style:['Corporate'], rating:4.2, popularity:870, updated_at:'2026-01-10', created_at:'2025-11-10', previewHTML:`<body style='font-family:system-ui'><h1>Health Tracker</h1><p>Health graphs & stats</p></body>`, screenshots:[], repo:'#', install:'npm i health-template', fileTree:{'index.html':{}, 'src':{'App.vue':{}}, 'package.json':{}}, deps:['Vue 3', 'Tailwind CSS']},
-            { id:'medicine', title:'Medicine Tracker', tech:['React','Bootstrap'], category:'Dashboard', license:'MIT', style:['Minimalist'], rating:4.0, popularity:590, updated_at:'2026-01-08', created_at:'2025-09-20', previewHTML:`<body style='font-family:system-ui'><h1>Medicine Tracker</h1><p>Schedule & reminders</p></body>`, screenshots:[], repo:'#', install:'npx create-medicine', fileTree:{'README.md':{}, 'src':{'index.js':{}, 'App.js':{}}}, deps:['React 18', 'Bootstrap']},
-            { id:'portfolio', title:'Portfolio Website', tech:['HTML','Tailwind'], category:'Portfolio', license:'MIT', style:['Minimalist','Dark Mode'], rating:4.8, popularity:2000, updated_at:'2026-01-20', created_at:'2025-06-12', previewHTML:`<body style='font-family:system-ui'><h1>Portfolio</h1><p>Showcase projects</p></body>`, screenshots:[], repo:'#', install:'git clone ...', fileTree:{'index.html':{}, 'assets':{}, 'projects':{}}, deps:['None - static']},
-            { id:'gaming', title:'Gaming Website', tech:['HTML','JS','Bootstrap'], category:'Community', license:'Paid', style:['Brutalist'], rating:3.9, popularity:430, updated_at:'2025-12-01', created_at:'2025-05-02', previewHTML:`<body style='font-family:system-ui'><h1>Gaming Hub</h1><p>Events and leaderboard</p></body>`, screenshots:[], repo:'#', install:'purchase license', fileTree:{'index.html':{}, 'assets':{}}, deps:['None']},
-            { id:'logo', title:'Logo Creator', tech:['HTML','Canvas'], category:'Tool', license:'MIT', style:['Minimalist'], rating:4.3, popularity:980, updated_at:'2026-01-05', created_at:'2025-08-10', previewHTML:`<body style='font-family:system-ui'><h1>Logo Editor</h1><p>Canvas demo</p></body>`, screenshots:[], repo:'#', install:'npm i logo-creator', fileTree:{'index.html':{}, 'canvas.js':{}}, deps:['None']}
+            {
+                id:'todo',
+                title:'To-Do Tracker',
+                description: 'A minimal to-do manager with drag & drop and local persistence.',
+                tech:['HTML','JS','Tailwind'],
+                category:'Dashboard',
+                license:'MIT',
+                style:['Minimalist'],
+                rating:4.6,
+                popularity:1250,
+                updated_at:'2026-01-19',
+                created_at:'2025-12-01',
+                image:'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1400&auto=format&fit=crop&ixlib=rb-4.0.3&s=1c8d2a2d6db6b2d9f6d6b3dc4f1c4a4b',
+                install: 'git clone https://github.com/example/todo && cd todo && npm install && npm run dev',
+                deps:['localForage','SortableJS'],
+                fileTree: {
+                    'index.html': null,
+                    'src': {
+                        'main.js': null,
+                        'components': {
+                            'App.js': null
+                        }
+                    },
+                    'package.json': null
+                },
+                demoUrl: 'https://example.com/demo-todo',
+                downloadUrl: 'https://github.com/example/todo'
+            },
+            {
+                id:'health',
+                title:'Health Tracker',
+                description: 'A health tracking dashboard with charts and analytics.',
+                tech:['Vue','Tailwind'],
+                category:'Dashboard',
+                license:'Creative Commons',
+                style:['Corporate'],
+                rating:4.2,
+                popularity:870,
+                updated_at:'2026-01-10',
+                created_at:'2025-10-12',
+                image:'https://images.unsplash.com/photo-1586773860413-6b3f7a6b7b2b?q=80&w=1400&auto=format&fit=crop&ixlib=rb-4.0.3&s=8c0b6f9e2f8f2abf6b2d3e5b0b0a9b9c',
+                install: 'git clone https://github.com/example/health && cd health && npm install && npm run dev',
+                deps:['Chart.js','Pinia'],
+                fileTree: {'index.html':null,'src':{'App.vue':null},'package.json':null},
+                demoUrl: 'https://example.com/demo-health',
+                downloadUrl: 'https://github.com/example/health'
+            },
+            {
+                id:'medicine',
+                title:'Medicine Tracker',
+                description: 'Prescription & intake tracker for small clinics.',
+                tech:['React','Bootstrap'],
+                category:'Dashboard',
+                license:'MIT',
+                style:['Minimalist'],
+                rating:4.0,
+                popularity:590,
+                updated_at:'2026-01-08',
+                created_at:'2025-09-20',
+                image:'https://images.unsplash.com/photo-1580281657527-6256f19f6b5f?q=80&w=1400&auto=format&fit=crop&ixlib=rb-4.0.3&s=5abfacd2a890c7a5c3b2c4a5f3b6a6cc',
+                install: 'git clone https://github.com/example/medicine && cd medicine && npm install && npm run dev',
+                deps:['React Router','Axios'],
+                fileTree: {'index.html':null,'src':{'index.js':null,'App.js':null},'package.json':null},
+                demoUrl: 'https://example.com/demo-medicine',
+                downloadUrl: 'https://github.com/example/medicine'
+            },
+            {
+                id:'portfolio',
+                title:'Portfolio Website',
+                description: 'A clean developer portfolio with dark mode and animations.',
+                tech:['HTML','Tailwind'],
+                category:'Portfolio',
+                license:'MIT',
+                style:['Minimalist','Dark Mode'],
+                rating:4.8,
+                popularity:2000,
+                updated_at:'2026-01-11',
+                created_at:'2025-07-28',
+                image:'https://images.unsplash.com/photo-1547658709-3be05a9f3fb8?q=80&w=1400&auto=format&fit=crop&ixlib=rb-4.0.3&s=9f6b2b6a5e3d8c0b6a2e6f7b4f3a2a2c',
+                install: 'download zip and open index.html',
+                deps:[],
+                fileTree: {'index.html':null,'assets':{'img.png':null}},
+                demoUrl: 'https://example.com/demo-portfolio',
+                downloadUrl: 'https://github.com/example/portfolio'
+            },
+            {
+                id:'gaming',
+                title:'Gaming Website',
+                description: 'Community portal for gamers with forums and leaderboards.',
+                tech:['HTML','JS','Bootstrap'],
+                category:'Community',
+                license:'Paid',
+                style:['Brutalist'],
+                rating:3.9,
+                popularity:430,
+                updated_at:'2025-12-01',
+                created_at:'2025-06-20',
+                image:'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1400&auto=format&fit=crop&ixlib=rb-4.0.3&s=3b7a2b2fd8c2b6c6e5b7d7c2a8b2c2d1',
+                install: 'download from dashboard',
+                deps:[],
+                fileTree: {'index.html':null},
+                demoUrl: 'https://example.com/demo-gaming',
+                downloadUrl: 'https://example.com/purchase-gaming'
+            },
+            {
+                id:'logo',
+                title:'Logo Creator',
+                description: 'Small canvas-based logo editor you can drop into sites.',
+                tech:['HTML','Canvas'],
+                category:'Tool',
+                license:'MIT',
+                style:['Minimalist'],
+                rating:4.3,
+                popularity:980,
+                updated_at:'2026-01-05',
+                created_at:'2025-08-10',
+                image:'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?q=80&w=1400&auto=format&fit=crop&ixlib=rb-4.0.3&s=6b4a7c3a9b2c3d4e5f6a7b8c9d0e1f2a',
+                install: 'git clone https://github.com/example/logo && cd logo && npm install && npm run dev',
+                deps:[],
+                fileTree: {'index.html':null,'src':{'logo.js':null}},
+                demoUrl: 'https://example.com/demo-logo',
+                downloadUrl: 'https://github.com/example/logo'
+            }
         ];
 
         // localStorage keys
@@ -182,76 +438,147 @@
             const catSet = new Set();
             const licSet = new Set();
             const styleSet = new Set();
-            templatesData.forEach(t => { t.tech.forEach(x=>techSet.add(x)); catSet.add(t.category); licSet.add(t.license); (t.style||[]).forEach(x=>styleSet.add(x)); });
+            templatesData.forEach(t => {
+                (t.tech || t.tech.forEach) ? t.tech.forEach(x=>techSet.add(x)) : (t.tech || []).forEach(x=>techSet.add(x));
+                (t.tech || []).forEach(x=>techSet.add(x));
+                if (t.tech) t.tech.forEach(x=>techSet.add(x));
+                if (t.tech) {} // defensive
+                if (t.category) catSet.add(t.category);
+                if (t.license) licSet.add(t.license);
+                (t.style||[]).forEach(x=>styleSet.add(x));
+            });
 
+            // Build chips
             buildFilterChips('filterTech', Array.from(techSet));
             buildFilterChips('filterCategory', Array.from(catSet));
             buildFilterChips('filterLicense', Array.from(licSet));
             buildFilterChips('filterStyle', Array.from(styleSet));
 
             document.getElementById('applyFilters').addEventListener('click', ()=>{ applyFilters(); renderGrid(); });
-            document.getElementById('clearFilters').addEventListener('click', ()=>{ activeFilters = {tech:new Set(), category:new Set(), license:new Set(), style:new Set()}; document.querySelectorAll('#filterSidebar .chip.active').forEach(c=>c.classList.remove('active')); renderGrid(); });
+            document.getElementById('clearFilters').addEventListener('click', ()=>{ activeFilters = {tech:new Set(), category:new Set(), license:new Set(), style:new Set()}; document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); renderGrid(); });
 
             // trending
-            TRENDING.forEach(t=>{ const b = document.createElement('button'); b.className='btn'; b.textContent = t; b.addEventListener('click',()=>{ searchInput.value=t; renderGrid(); }); trendingEl.appendChild(b); });
+            TRENDING.forEach(t=>{
+                const b = document.createElement('button');
+                b.className='chip';
+                b.textContent = t;
+                b.addEventListener('click',()=>{ searchInput.value=t; renderGrid(); });
+                trendingEl.appendChild(b);
+            });
         }
 
         function buildFilterChips(containerId, items) {
             const parent = document.getElementById(containerId);
+            if (!parent) return;
+            parent.innerHTML = '';
             items.forEach(i=>{
-                const chip = document.createElement('button'); chip.className='chip'; chip.textContent = i; chip.addEventListener('click', ()=>{ chip.classList.toggle('active'); let key = containerId.replace('filter','').toLowerCase(); if (chip.classList.contains('active')) activeFilters[key].add(i); else activeFilters[key].delete(i); }); parent.appendChild(chip);
+                const chip = document.createElement('button');
+                chip.className='chip';
+                chip.textContent = i;
+                chip.addEventListener('click', ()=>{
+                    chip.classList.toggle('active');
+                    // map container id to activeFilters key
+                    let key = '';
+                    if (containerId.includes('Tech')) key = 'tech';
+                    else if (containerId.includes('Category')) key = 'category';
+                    else if (containerId.includes('License')) key = 'license';
+                    else if (containerId.includes('Style')) key = 'style';
+                    if (!key) return;
+                    if (activeFilters[key].has(i)) activeFilters[key].delete(i);
+                    else activeFilters[key].add(i);
+                });
+                parent.appendChild(chip);
             });
         }
 
         // Search autocomplete (simple)
         searchInput.addEventListener('input', (e)=>{
-            const v = e.target.value.toLowerCase(); autocomplete.innerHTML=''; if (!v) return;
-            const matches = templatesData.filter(t=>t.title.toLowerCase().includes(v)).slice(0,6);
-            const list = document.createElement('div'); list.style.background='#fff'; list.style.border='1px solid #e5e7eb'; list.style.position='absolute'; list.style.zIndex=1500; list.style.marginTop='4px'; list.style.padding='8px'; list.style.borderRadius='6px'; matches.forEach(m=>{ const li=document.createElement('div'); li.style.padding='6px'; li.style.cursor='pointer'; li.textContent=m.title; li.addEventListener('click',()=>{searchInput.value=m.title; autocomplete.innerHTML=''; renderGrid();}); list.appendChild(li); }); autocomplete.appendChild(list);
+            const v = e.target.value.trim().toLowerCase();
+            autocomplete.innerHTML='';
+            if (!v) return;
+            const matches = templatesData.filter(t=>t.title.toLowerCase().includes(v) || (t.category||'').toLowerCase().includes(v)).slice(0,6);
+            if (!matches.length) return;
+            const list = document.createElement('div');
+            list.className='autocomplete-list';
+            matches.forEach(m=>{
+                const item = document.createElement('div');
+                item.className='autocomplete-item';
+                item.textContent = `${m.title} — ${m.category} (${m.tech.join(', ')})`;
+                item.addEventListener('click', ()=>{ searchInput.value = m.title; autocomplete.innerHTML=''; renderGrid(); });
+                list.appendChild(item);
+            });
+            autocomplete.appendChild(list);
+        });
+
+        // clicking outside of autocomplete closes it
+        document.addEventListener('click', (e)=>{
+            if (!autocomplete.contains(e.target) && e.target !== searchInput){
+                autocomplete.innerHTML = '';
+            }
         });
 
         // Simple sort and filter pipeline
         function applyFilters() {
-            // nothing extra to do: activeFilters used in render
+            // activeFilters used directly in renderGrid
         }
 
         function renderGrid() {
             const q = searchInput.value.trim().toLowerCase();
             let results = templatesData.filter(t=>{
-                if (q) { if (!(t.title.toLowerCase().includes(q) || (t.category||'').toLowerCase().includes(q) || t.tech.join(' ').toLowerCase().includes(q))) return false; }
-                if (activeFilters.tech.size && !t.tech.some(x=>activeFilters.tech.has(x))) return false;
+                if (q) {
+                    if (!(t.title.toLowerCase().includes(q) || (t.category||'').toLowerCase().includes(q) || (t.tech || t.techStack || []).join(' ').toLowerCase().includes(q))) return false;
+                }
+                if (activeFilters.tech.size && !((t.tech||t.techStack||[]).some(x=>activeFilters.tech.has(x)))) return false;
                 if (activeFilters.category.size && !activeFilters.category.has(t.category)) return false;
-                if (activeFilters.license.size && !activeFilters.license.has(t.license)) return false;
-                if (activeFilters.style.size && !(t.style||[]).some(x=>activeFilters.style.has(x))) return false;
+                if (activeFilters.license.size && !activeFilters.license.has(t.license || t.license)) return false;
+                if (activeFilters.style.size && !((t.style||[]).some(x=>activeFilters.style.has(x)))) return false;
                 return true;
             });
 
             // sorting
-            if (currentSort === 'popular') results.sort((a,b)=>b.popularity-a.popularity);
-            else if (currentSort === 'newest') results.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
-            else if (currentSort === 'updated') results.sort((a,b)=>new Date(b.updated_at)-new Date(a.updated_at));
-            else if (currentSort === 'toprated') results.sort((a,b)=>b.rating-a.rating);
+            if (currentSort === 'popular') results.sort((a,b)=> (b.popularity||0) - (a.popularity||0));
+            else if (currentSort === 'newest') results.sort((a,b)=> new Date(b.created_at) - new Date(a.created_at));
+            else if (currentSort === 'updated') results.sort((a,b)=> new Date(b.updated_at) - new Date(a.updated_at));
+            else if (currentSort === 'toprated') results.sort((a,b)=> (b.rating||0) - (a.rating||0));
 
             grid.innerHTML='';
             results.forEach(t=>{
-                const card = document.createElement('div'); card.className='template-card'; card.style.position='relative'; card.style.padding='12px'; card.style.borderRadius='12px'; card.style.cursor='pointer';
+                const card = document.createElement('div');
+                card.className = 'template-card';
+                card.style.position='relative';
+                card.style.padding='12px';
+                card.style.borderRadius='12px';
+                card.style.cursor='pointer';
+
+                const techs = (t.tech||t.techStack||[]).map(tech=>`<span class="tech-badge" title="${escapeHtml(tech)}" style="margin-right:6px">${escapeHtml(tech)}</span>`).join('');
                 card.innerHTML = `
-                    <div style="display:flex; justify-content:space-between;">
+                    <div style="position:relative;">
+                        <img src="${escapeHtml(t.image)}" alt="${escapeHtml(t.title)}" />
+                        <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity .2s; background:linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,0.35));" class="card-overlay">
+                            <button class="btn" data-action="preview" data-id="${escapeHtml(t.id)}">Preview</button>
+                        </div>
+                    </div>
+                    <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:flex-start;">
                         <div>
-                            <div style="font-size:1.1rem; font-weight:700;">${escapeHtml(t.title)}</div>
-                            <div style="color:var(--text-light); font-size:0.9rem;">${escapeHtml(t.category)} • ${escapeHtml(t.license)}</div>
+                            <div style="font-size:1.05rem; font-weight:700;">${escapeHtml(t.title)}</div>
+                            <div style="color:var(--text-light); font-size:0.9rem; margin-top:4px;">${escapeHtml(t.category)} • ${escapeHtml(t.license)}</div>
                         </div>
-                        <div style="display:flex; gap:6px; align-items:center;">
-                            ${t.tech.map(tech=>`<span class="tech-badge" title="${tech}" style="background:rgba(0,0,0,0.05); padding:6px; border-radius:6px; font-size:0.8rem;">${tech}</span>`).join('')}
+                        <div style="text-align:right;">
+                            <div class="badge">${escapeHtml(t.price || (t.price === 0 ? 'Free' : 'Free'))}</div>
                         </div>
                     </div>
-                    <p style="color:var(--text-light); margin-top:8px;">Rating: ${t.rating} • ${t.popularity} downloads</p>
+                    <div style="margin-top:8px; color:var(--text-light);">Rating: ${t.rating} • ${t.popularity} downloads</div>
+                    <div style="margin-top:8px;">${techs}</div>
                     <div style="position:absolute; right:12px; top:12px; display:flex; gap:8px;">
-                        <button class="btn" data-action="preview" data-id="${t.id}">Preview</button>
-                        <button class="btn" data-action="details" data-id="${t.id}">Details</button>
-                        <button class="btn" data-action="fav" data-id="${t.id}">☆</button>
+                        <button class="btn" data-action="details" data-id="${escapeHtml(t.id)}">Details</button>
+                        <button class="btn" data-action="fav" data-id="${escapeHtml(t.id)}">☆</button>
                     </div>
+                    <div style="margin-top:12px;"><button class="btn btn-primary" data-action="download" data-id="${escapeHtml(t.id)}">Get Code</button></div>
                 `;
+                // mouseover overlay show/hide
+                card.addEventListener('mouseenter', ()=>{ const o = card.querySelector('.card-overlay'); if (o) o.style.opacity = 1; });
+                card.addEventListener('mouseleave', ()=>{ const o = card.querySelector('.card-overlay'); if (o) o.style.opacity = 0; });
+
                 grid.appendChild(card);
             });
             resultsCount.textContent = results.length;
@@ -260,11 +587,22 @@
             grid.querySelectorAll('[data-action="preview"]').forEach(b=>b.addEventListener('click',(e)=>{ openPreview(b.dataset.id); e.stopPropagation(); }));
             grid.querySelectorAll('[data-action="details"]').forEach(b=>b.addEventListener('click',(e)=>{ openDetails(b.dataset.id); e.stopPropagation(); }));
             grid.querySelectorAll('[data-action="fav"]').forEach(b=>b.addEventListener('click', (e)=>{ toggleFavorite(b.dataset.id); e.stopPropagation(); }));
+            grid.querySelectorAll('[data-action="download"]').forEach(b=>b.addEventListener('click', (e)=>{ const id=b.dataset.id; const t = templatesData.find(x=>x.id===id); if (t){ recordDownload(id, t.downloadUrl); window.open(t.downloadUrl,'_blank'); } e.stopPropagation(); }));
         }
 
         // Favorites
-        function getFavs(){ return JSON.parse(localStorage.getItem(FAV_KEY)||'[]'); }
-        function toggleFavorite(id){ let favs = new Set(getFavs()); if (favs.has(id)) favs.delete(id); else favs.add(id); localStorage.setItem(FAV_KEY, JSON.stringify(Array.from(favs))); renderGrid(); }
+        function getFavs(){ try { return JSON.parse(localStorage.getItem(FAV_KEY)||'[]'); } catch(e){ return []; } }
+        function toggleFavorite(id){
+            let favs = new Set(getFavs());
+            if (favs.has(id)) {
+                favs.delete(id);
+            } else {
+                favs.add(id);
+            }
+            localStorage.setItem(FAV_KEY, JSON.stringify(Array.from(favs)));
+            renderGrid();
+            renderDashboard();
+        }
 
         // Preview
         const previewModal = document.getElementById('previewModal');
@@ -273,66 +611,218 @@
         const previewMeta = document.getElementById('previewMeta');
         document.getElementById('deviceSelect').addEventListener('change', (e)=>{ setPreviewDevice(e.target.value); });
         document.getElementById('themeToggle').addEventListener('change', (e)=>{ setPreviewTheme(e.target.checked ? 'dark' : 'light'); });
-        document.getElementById('openFullBtn').addEventListener('click', ()=>{ window.open(currentPreviewWindowUrl || previewIframe.srcdoc || '', '_blank'); });
+        document.getElementById('openFullBtn').addEventListener('click', ()=>{ if (currentPreviewWindowUrl) window.open(currentPreviewWindowUrl, '_blank'); else window.open(previewIframe.src || '', '_blank'); });
+        document.getElementById('closePreviewBtn').addEventListener('click', closePreview);
 
         let currentPreviewTemplate = null;
         let currentPreviewWindowUrl = null;
 
-        function openPreview(id){ const t = templatesData.find(x=>x.id===id); if (!t) return; currentPreviewTemplate = t; previewTitle.textContent = t.title; previewMeta.textContent = \
- `${t.tech.join(', ')} • ${t.category}`; previewModal.style.display='block'; // inject preview into iframe via srcdoc
-            // include basic reset and optionally theme toggling hooks
-            const baseHTML = `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><style>body{font-family:system-ui;padding:20px;} .dark-mode{background:#0f172a;color:#fff;} </style></head><body>${t.previewHTML}</body></html>`;
-            previewIframe.srcdoc = baseHTML;
+        function openPreview(id){
+            const t = templatesData.find(x=>String(x.id)===String(id));
+            if (!t) return;
+            currentPreviewTemplate = t;
+            previewTitle.textContent = t.title;
+            previewMeta.textContent = `${(t.tech||t.techStack||[]).join(', ')} • ${t.category}`;
+            previewModal.style.display='flex';
+
+            // If demoUrl can be embedded, use src; otherwise create a small srcdoc placeholder
+            // Use src when it isn't about:blank, but many external sites block framing via X-Frame-Options.
+            if (t.demoUrl && !t.demoUrl.startsWith('about:')) {
+                // Try to load as src; if blocked the iframe will show error - user can open full site.
+                previewIframe.src = t.demoUrl;
+                currentPreviewWindowUrl = t.demoUrl;
+            } else {
+                // Build a minimal srcdoc (fallback)
+                const baseHTML = `<!doctype html>
+                    <html>
+                    <head>
+                      <meta charset="utf-8" />
+                      <meta name="viewport" content="width=device-width,initial-scale=1" />
+                      <style>body{font-family:Inter,system-ui,Arial;margin:0;padding:24px;background:#fff;color:#111} h1{font-size:20px} .meta{color:#64748b}</style>
+                    </head>
+                    <body>
+                      <h1>${escapeHtml(t.title)}</h1>
+                      <div class="meta">${escapeHtml(t.description || '')}</div>
+                      <hr />
+                      <p>This is a local preview placeholder. In the deployed product replace this with the actual demo URL or a bundled preview.</p>
+                    </body>
+                    </html>`;
+                previewIframe.removeAttribute('src');
+                previewIframe.srcdoc = baseHTML;
+                currentPreviewWindowUrl = '';
+            }
             setPreviewDevice(document.getElementById('deviceSelect').value);
+            // reset theme toggle
+            document.getElementById('themeToggle').checked = false;
         }
-        function closePreview(){ previewModal.style.display='none'; previewIframe.srcdoc = ''; }
-        function setPreviewDevice(d){ if (d==='desktop'){ previewIframe.style.width='100%'; previewIframe.style.height='80vh'; } else if (d==='tablet'){ previewIframe.style.width='900px'; previewIframe.style.height='70vh'; } else { previewIframe.style.width='420px'; previewIframe.style.height='80vh'; } }
-        function setPreviewTheme(theme){ // inject a small script to toggle dark class if the template supports it
-            if (!previewIframe.contentDocument) return; try { if (theme==='dark'){ previewIframe.contentDocument.body.classList.add('dark-mode'); } else previewIframe.contentDocument.body.classList.remove('dark-mode'); } catch(e){} }
+
+        function closePreview(){ previewModal.style.display='none'; try { previewIframe.src = ''; previewIframe.srcdoc = ''; } catch(e){} currentPreviewTemplate = null; currentPreviewWindowUrl = null; }
+
+        function setPreviewDevice(d){
+            if (!previewIframe) return;
+            if (d==='desktop'){ previewIframe.style.width='100%'; previewIframe.style.height='80vh'; previewIframe.style.maxWidth='100%'; }
+            else if (d==='tablet'){ previewIframe.style.width='900px'; previewIframe.style.height='80vh'; previewIframe.style.maxWidth='95%'; }
+            else if (d==='mobile'){ previewIframe.style.width='375px'; previewIframe.style.height='80vh'; previewIframe.style.maxWidth='95%'; }
+        }
+
+        function setPreviewTheme(theme){
+            // Try to inject a small script that toggles a class on the body of the iframe if same-origin or srcdoc.
+            try {
+                const doc = previewIframe.contentDocument || previewIframe.contentWindow.document;
+                if (!doc) return;
+                if (theme === 'dark') {
+                    doc.documentElement.style.background = '#0b1220';
+                    doc.body.style.background = '#0b1220';
+                    doc.body.style.color = '#e6eef8';
+                } else {
+                    doc.documentElement.style.background = '';
+                    doc.body.style.background = '';
+                    doc.body.style.color = '';
+                }
+            } catch (e) {
+                // cross-origin - cannot manipulate. nothing to do.
+                return;
+            }
+        }
 
         // Details
-        function openDetails(id){ const t = templatesData.find(x=>x.id===id); if (!t) return; const body = document.getElementById('detailsBody'); let html = `<h2>${escapeHtml(t.title)}</h2><p style="color:var(--text-light);">${escapeHtml(t.category)} • ${escapeHtml(t.license)} • ${t.tech.join(', ')}</p>`;
-            html += `<h3>Install</h3><div style="display:flex; gap:8px;"><code id="installCmd">${escapeHtml(t.install)}</code><button class="btn" id="copyInstallBtn">Copy</button></div>`;
-            html += `<h3>Dependencies</h3><ul>${t.deps.map(d=>`<li>${escapeHtml(d)}</li>`).join('')}</ul>`;
+        function openDetails(id){
+            const t = templatesData.find(x=>String(x.id)===String(id));
+            if (!t) return;
+            const body = document.getElementById('detailsBody');
+            let html = `<h2>${escapeHtml(t.title)}</h2><p style="color:${varToHex('--text-light')};">${escapeHtml(t.description || '')}</p>`;
+            html += `<p><strong>Tech:</strong> ${(t.tech||t.techStack||[]).map(x=>`<span style="display:inline-block;margin-right:6px;padding:4px 6px;background:#f1f5f9;border-radius:6px">${escapeHtml(x)}</span>`).join('')}</p>`;
+            html += `<h3>Install</h3><div style="display:flex; gap:8px; align-items:center;"><code id="installCmd" style="background:#f8fafc;padding:8px;border-radius:6px;">${escapeHtml(t.install||'')}</code><button class="btn" id="copyInstallBtn">Copy</button></div>`;
+            html += `<h3>Dependencies</h3><ul>${(t.deps||[]).map(d=>`<li>${escapeHtml(d)}</li>`).join('')}</ul>`;
             html += `<h3>File Structure</h3><div>${renderFileTree(t.fileTree)}</div>`;
-            html += `<h3>Lighthouse (placeholder)</h3><p style="color:#64748b;">To populate Lighthouse scores integrate with Lighthouse CI or PageSpeed Insights API on your server and store results on the template record.</p>`;
-            body.innerHTML = html; document.getElementById('detailsModal').style.display='block'; document.getElementById('copyInstallBtn').addEventListener('click', ()=>{ navigator.clipboard.writeText(t.install).then(()=>alert('Copied install command')); });
+            html += `<h3>Live Demo</h3><div><a href="${escapeHtml(t.demoUrl||'#')}" target="_blank" rel="noreferrer">${escapeHtml(t.demoUrl||'No demo available')}</a></div>`;
+            body.innerHTML = html;
+            document.getElementById('detailsModal').style.display='flex';
+
+            // copy install
+            const copyBtn = document.getElementById('copyInstallBtn');
+            if (copyBtn) copyBtn.addEventListener('click', ()=>{ navigator.clipboard.writeText(t.install||'').then(()=> { copyBtn.textContent='Copied'; setTimeout(()=>copyBtn.textContent='Copy',1400); }); });
         }
+        document.getElementById('closeDetailsBtn').addEventListener('click', closeDetails);
         function closeDetails(){ document.getElementById('detailsModal').style.display='none'; }
 
-        function renderFileTree(tree){ if (!tree) return '<em>No files available</em>'; let out = '<ul style="font-family:monospace;">'; for (const k in tree){ out += `<li>${escapeHtml(k)}`; if (Object.keys(tree[k]).length) out += renderFileTree(tree[k]); out += `</li>`; } out += '</ul>'; return out; }
+        function renderFileTree(tree){
+            if (!tree) return '<em>No files available</em>';
+            function walk(node){
+                if (node === null) return '<li><code>file</code></li>';
+                if (typeof node !== 'object') return `<li>${escapeHtml(String(node))}</li>`;
+                let out = '<ul style="font-family:monospace;margin-left:8px;">';
+                for (const k in node){
+                    const v = node[k];
+                    if (v && typeof v === 'object'){
+                        out += `<li><strong>${escapeHtml(k)}</strong>${walk(v)}</li>`;
+                    } else {
+                        out += `<li>${escapeHtml(k)}</li>`;
+                    }
+                }
+                out += '</ul>';
+                return out;
+            }
+            return walk(tree);
+        }
+
+        function varToHex(varName){
+            try {
+                return getComputedStyle(document.documentElement).getPropertyValue(varName) || '#64748b';
+            } catch(e){ return '#64748b'; }
+        }
 
         // Dashboard
         document.getElementById('openDashboardBtn').addEventListener('click', ()=>{ openDashboard(); });
-        function openDashboard(){ const modal = document.getElementById('dashboardModal'); modal.style.display='block'; renderDashboard(); }
+        document.getElementById('closeDashboardBtn').addEventListener('click', ()=>{ closeDashboard(); });
+        function openDashboard(){ const modal = document.getElementById('dashboardModal'); modal.style.display='flex'; renderDashboard(); }
         function closeDashboard(){ document.getElementById('dashboardModal').style.display='none'; }
-        function renderDashboard(){ const favList = document.getElementById('favList'); favList.innerHTML=''; const favs = getFavs(); favs.forEach(id=>{ const t = templatesData.find(x=>x.id===id); if (!t) return; const el=document.createElement('div'); el.className='item-card'; el.innerHTML = `<div><strong>${escapeHtml(t.title)}</strong><div style="color:#64748b">${escapeHtml(t.category)}</div></div><div style="display:flex; gap:8px;"><button class="btn" data-open="${t.id}">Open</button><button class="btn btn-danger" data-remove="${t.id}">Remove</button></div>`; favList.appendChild(el); el.querySelector('[data-open]')?.addEventListener('click',()=>{ openDetails(t.id); }); el.querySelector('[data-remove]')?.addEventListener('click',()=>{ toggleFavorite(t.id); renderDashboard(); }); });
-            const downloads = JSON.parse(localStorage.getItem(DOWNLOAD_KEY)||'[]'); const hist = document.getElementById('downloadHistory'); hist.innerHTML=''; downloads.forEach(d=>{ const t = templatesData.find(x=>x.id===d.id); const el = document.createElement('div'); el.className='item-card'; el.innerHTML = `<div><strong>${t?escapeHtml(t.title):escapeHtml(d.id)}</strong><div style="color:#64748b">${d.at}</div></div><div><button class="btn" onclick="(function(){window.open('${d.url || '#'}','_blank')})()">Open</button></div>`; hist.appendChild(el); }); }
+        function renderDashboard(){
+            const favList = document.getElementById('favList'); favList.innerHTML='';
+            const favs = getFavs();
+            if (!favs.length) favList.innerHTML = '<div style="color:var(--text-light)">No saved templates</div>';
+            favs.forEach(id=>{
+                const t = templatesData.find(x=>x.id===id);
+                if (!t) return;
+                const row = document.createElement('div');
+                row.className='history-row';
+                row.innerHTML = `<div><strong>${escapeHtml(t.title)}</strong><div style="font-size:12px;color:var(--text-light)">${escapeHtml(t.category)}</div></div><div><button class="btn" data-action="open" data-id="${escapeHtml(id)}">Open</button> <button class="btn" data-action="remove" data-id="${escapeHtml(id)}">Remove</button></div>`;
+                favList.appendChild(row);
+            });
+            favList.querySelectorAll('[data-action="open"]').forEach(b=>b.addEventListener('click',(e)=>{ const id=b.dataset.id; openDetails(id); }));
+            favList.querySelectorAll('[data-action="remove"]').forEach(b=>b.addEventListener('click',(e)=>{ const id=b.dataset.id; let favs=new Set(getFavs()); favs.delete(id); localStorage.setItem(FAV_KEY, JSON.stringify(Array.from(favs))); renderDashboard(); renderGrid(); }));
+
+            const downloads = JSON.parse(localStorage.getItem(DOWNLOAD_KEY)||'[]');
+            const hist = document.getElementById('downloadHistory'); hist.innerHTML='';
+            if (!downloads.length) hist.innerHTML = '<div style="color:var(--text-light)">No downloads yet</div>';
+            downloads.forEach(d=>{
+                const t = templatesData.find(x=>x.id===d.id);
+                const row = document.createElement('div');
+                row.className='history-row';
+                row.innerHTML = `<div><strong>${escapeHtml(t ? t.title : d.id)}</strong><div style="font-size:12px;color:var(--text-light)">${escapeHtml(d.at)}</div></div><div><a href="${escapeHtml(d.url)}" target="_blank" class="btn">Open</a></div>`;
+                hist.appendChild(row);
+            });
+        }
 
         // Submission
-        document.getElementById('uploadBtn').addEventListener('click', ()=>{ document.getElementById('submissionModal').style.display='block'; });
-        document.getElementById('submitTemplateBtn').addEventListener('click', ()=>{ const title = document.getElementById('subTitle').value.trim(); const repo = document.getElementById('subRepo').value.trim(); const tech = document.getElementById('subTech').value.split(',').map(s=>s.trim()).filter(Boolean); const category = document.getElementById('subCategory').value.trim(); const license = document.getElementById('subLicense').value; const thumb = document.getElementById('subThumb').files[0]; if (!title || !repo) { alert('Please fill title and repo URL'); return; } const submission = {id:'sub_'+Date.now(), title, repo, tech, category, license, thumbName: thumb?thumb.name:'', at: new Date().toISOString()}; const subs = JSON.parse(localStorage.getItem(SUBMIT_KEY)||'[]'); subs.push(submission); localStorage.setItem(SUBMIT_KEY, JSON.stringify(subs)); alert('Submitted (saved locally)'); closeSubmission(); });
+        document.getElementById('uploadBtn').addEventListener('click', ()=>{ document.getElementById('submissionModal').style.display='flex'; });
+        document.getElementById('closeSubmissionBtn').addEventListener('click', closeSubmission);
+        document.getElementById('cancelSubmissionBtn').addEventListener('click', closeSubmission);
+        document.getElementById('submitTemplateBtn').addEventListener('click', async () => {
+            const title = document.getElementById('subTitle').value.trim();
+            const repo = document.getElementById('subRepo').value.trim();
+            const tech = document.getElementById('subTech').value.split(',').map(s=>s.trim()).filter(Boolean);
+            const category = document.getElementById('subCategory').value.trim();
+            const license = document.getElementById('subLicense').value;
+            if (!title || !repo) { alert('Please provide a title and repo URL'); return; }
+            const submissions = JSON.parse(localStorage.getItem(SUBMIT_KEY)||'[]');
+            submissions.unshift({id:'s_'+Date.now(), title, repo, tech, category, license, at:new Date().toLocaleString()});
+            localStorage.setItem(SUBMIT_KEY, JSON.stringify(submissions));
+            alert('Submitted — thank you! We will review the template.');
+            closeSubmission();
+        });
         function closeSubmission(){ document.getElementById('submissionModal').style.display='none'; }
 
         // Utility
-        function escapeHtml(unsafe){ return String(unsafe).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
+        function escapeHtml(unsafe){ return String(unsafe||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
 
-        // basic interactions for the initial templates (To-Do & Medicine) that use existing localStorage keys. Keep earlier todo behavior but it's now embedded in templatesData previews for demo.
+        // recordDownload for download history
+        function recordDownload(id, url){
+            try {
+                const hist = JSON.parse(localStorage.getItem(DOWNLOAD_KEY)||'[]');
+                hist.unshift({id, at:new Date().toLocaleString(), url});
+                // keep last 50
+                localStorage.setItem(DOWNLOAD_KEY, JSON.stringify(hist.slice(0,50)));
+                renderDashboard();
+            } catch(e){}
+        }
 
         // init
-        initFilters(); renderGrid();
+        initFilters();
+        renderGrid();
 
         // global handlers to close modals when clicking outside
-        window.addEventListener('click', (e)=>{ ['previewModal','detailsModal','submissionModal','dashboardModal'].forEach(id=>{ const el = document.getElementById(id); if (el && el.style.display==='block' && e.target===el) el.style.display='none'; }); });
+        window.addEventListener('click', (e)=>{
+            ['previewModal','detailsModal','submissionModal','dashboardModal'].forEach(id=>{
+                const el = document.getElementById(id);
+                if (el && el.style.display === 'flex' && e.target === el){
+                    el.style.display = 'none';
+                }
+            });
+        });
 
         // sort handler
         document.getElementById('sortSelect').addEventListener('change', (e)=>{ currentSort = e.target.value; renderGrid(); });
 
-        // preview close helper
-        function closePreview(){ document.getElementById('previewModal').style.display='none'; }
-
-        // small helper when downloading (for download history)
-        function recordDownload(id, url){ const hist = JSON.parse(localStorage.getItem(DOWNLOAD_KEY)||'[]'); hist.unshift({id, at:new Date().toLocaleString(), url}); localStorage.setItem(DOWNLOAD_KEY, JSON.stringify(hist)); }
+        // Keyboard escape closes open modals
+        window.addEventListener('keydown', (e)=>{
+            if (e.key === 'Escape'){
+                ['previewModal','detailsModal','submissionModal','dashboardModal'].forEach(id=>{
+                    const el = document.getElementById(id);
+                    if (el && el.style.display === 'flex') el.style.display = 'none';
+                });
+            }
+        });
 
     </script>
 </body>
