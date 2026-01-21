@@ -1,829 +1,362 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Template Hub - Your One-Stop Solution</title>
-    <style>
-        /* Core CSS variables and layout */
-        :root{
-            --primary-color:#6366f1;
-            --secondary-color:#8b5cf6;
-            --accent-color:#ec4899;
-            --dark-bg:#0f172a;
-            --light-bg:#f8fafc;
-            --text-dark:#0f172a;
-            --text-light:#64748b;
-            --white:#ffffff;
-            --card-bg: #ffffff;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Template Hub — Home</title>
+  <meta name="description" content="Template Hub — discover beautiful website templates" />
+  <style>
+:root{
+  --bg:#0f172a;
+  --muted:#64748b;
+  --card:#ffffff;
+  --primary:#6366f1;
+  --accent:#ec4899;
+  --glass: rgba(255,255,255,0.06);
+  --radius:12px;
+  --max-width:1200px;
+  --text:#0f172a;
+  --soft:#f8fafc;
+}
 
-        html,body{
-            height:100%;
-            margin:0;
-            font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-            background: var(--light-bg);
-            color: var(--text-dark);
-        }
+/* Reset + container */
+*{box-sizing:border-box}
+html,body{height:100%; margin:0; font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:linear-gradient(180deg,#fbfdff 0%, #f8fafc 60%); color:var(--text)}
+.container{max-width:var(--max-width); margin:0 auto; padding:24px}
 
-        /* Buttons */
-        .btn{
-            background: transparent;
-            border: 1px solid rgba(15,23,42,0.06);
-            padding:8px 12px;
-            border-radius:8px;
-            cursor:pointer;
-            font-weight:600;
-        }
-        .btn-primary{
-            background:var(--primary-color);
-            color:var(--white);
-            border: none;
-        }
-        .btn-danger{
-            background: #fee2e2;
-            color: #991b1b;
-            border: none;
-        }
+/* Topbar */
+.topbar{position:sticky;top:0;background:rgba(255,255,255,0.95);backdrop-filter: blur(6px);border-bottom:1px solid rgba(15,23,42,0.04);z-index:50}
+.topbar-inner{display:flex;align-items:center;gap:16px}
+.brand{font-weight:800;color:var(--text);text-decoration:none;font-size:1.2rem}
+.brand span{color:var(--primary)}
+.nav{display:flex;gap:12px;margin-left:auto}
+.nav-link{color:var(--muted);text-decoration:none;padding:8px 10px;border-radius:8px;transition:all .2s}
+.nav-link:hover{color:var(--text);transform:translateY(-2px)}
+.nav-toggle{display:none;background:transparent;border:0}
 
-        /* chips */
-        .chip{
-            padding:6px 10px;
-            border-radius:999px;
-            background: #f1f5f9;
-            border:1px solid rgba(15,23,42,0.03);
-            cursor:pointer;
-            font-size:0.9rem;
-        }
-        .chip.active{
-            background: linear-gradient(90deg,var(--primary-color),var(--secondary-color));
-            color: white;
-            box-shadow: 0 6px 18px rgba(99,102,241,0.12);
-        }
+/* Hero */
+.hero{position:relative;padding:60px 0 20px;overflow:visible}
+.hero-inner{display:flex;gap:40px;align-items:center}
+.hero-left{flex:1}
+.headline{font-size:2.2rem;margin:0 0 12px;line-height:1.05}
+.subhead{color:var(--muted);margin:0 0 18px}
+.hero-actions{display:flex;gap:12px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;border:1px solid rgba(15,23,42,0.06);cursor:pointer;text-decoration:none}
+.btn-primary{background:linear-gradient(90deg,var(--primary),#8b5cf6);color:#fff;border:0;box-shadow:0 8px 30px rgba(99,102,241,0.12);transition:transform .18s}
+.btn-primary:hover{transform:translateY(-4px)}
+.btn-outline{background:transparent;border:1px solid rgba(15,23,42,0.06)}
 
-        /* grid and cards */
-        .container{ max-width:1200px; margin:0 auto; padding:0 20px; }
-        .template-grid{
-            display:grid;
-            grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
-            gap:18px;
-        }
-        .template-card{
-            background:var(--card-bg);
-            border-radius:12px;
-            padding:12px;
-            box-shadow: 0 6px 18px rgba(2,6,23,0.04);
-            position:relative;
-            overflow:hidden;
-        }
-        .template-card img{ width:100%; height:160px; object-fit:cover; border-radius:8px; display:block; }
+/* Preview card */
+.hero-right{width:420px;display:flex;flex-direction:column;gap:16px;align-items:flex-end}
+.preview-card{width:100%;background:linear-gradient(180deg, rgba(255,255,255,0.9), #fff);border-radius:16px;overflow:hidden;box-shadow:0 24px 60px rgba(2,6,23,0.08);position:relative;transform:translateY(0);transition:transform .28s}
+.preview-card img{width:100%;height:260px;object-fit:cover;display:block}
+.preview-overlay{position:absolute;right:12px;bottom:12px;background:linear-gradient(90deg,var(--primary),var(--accent));padding:8px;border-radius:12px;color:#fff}
+.preview-stats{display:flex;gap:12px;align-items:center}
+.stat small{display:block;font-size:0.7rem;opacity:.9}
 
-        .tech-badge{ display:inline-block; padding:6px; border-radius:6px; font-size:0.8rem; background:#eef2ff; color:#3730a3; }
+/* mini grid */
+.mini-grid{display:flex;gap:12px;align-items:center}
+.mini-card{background:linear-gradient(180deg,#fff,#fbfdff);padding:10px 12px;border-radius:10px;box-shadow:0 12px 30px rgba(2,6,23,0.04);font-weight:700}
 
-        /* modals */
-        .modal{
-            position:fixed;
-            inset:0;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            background: rgba(2,6,23,0.45);
-            z-index:2000;
-            padding:20px;
-        }
-        .modal .modal-content{
-            background:var(--white);
-            border-radius:12px;
-            width:100%;
-            max-width:1100px;
-            max-height:96vh;
-            overflow:auto;
-            position:relative;
-        }
-        .close-btn{
-            background:transparent;
-            border:none;
-            font-size:1.4rem;
-            cursor:pointer;
-        }
+/* sections */
+.section-title{margin:8px 0 12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
 
-        /* small UI */
-        input[type="search"], input[type="text"], input[type="url"], select{
-            padding:10px 12px;
-            border-radius:8px;
-            border:1px solid #e6edf3;
-            width:100%;
-            box-sizing:border-box;
-        }
+/* card */
+.template-card{
+  background:var(--card);
+  border-radius:14px;
+  padding:12px;
+  box-shadow: 0 16px 40px rgba(2,6,23,0.06);
+  overflow:hidden;
+  transition:transform .28s, box-shadow .28s;
+}
+.template-card:hover{transform:translateY(-8px) scale(1.01);box-shadow:0 30px 80px rgba(2,6,23,0.12)}
+.template-card img{width:100%;height:140px;object-fit:cover;border-radius:8px}
 
-        .item-list{ display:flex; flex-direction:column; gap:8px; }
-        .history-row{ padding:8px; border-radius:8px; background:#f8fafc; display:flex; justify-content:space-between; align-items:center; }
+/* animations */
+@keyframes floaty { 0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)} }
+@keyframes fadeUp { from{opacity:0; transform:translateY(12px)} to{opacity:1; transform:none} }
+@keyframes tiltIn { from{transform:rotateX(8deg) rotateY(-6deg) translateY(8px)} to{transform:none} }
+@keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
 
-        .badge { background:#eef2ff; color:#3730a3; padding:6px 8px; border-radius:8px; font-weight:600; }
+/* utility animation classes */
+.animate-float{animation:floaty 6s ease-in-out infinite}
+.animate-fadeup{opacity:0; animation:fadeUp .6s forwards}
+.delay-1{animation-delay:.12s}
+.delay-2{animation-delay:.28s}
+.delay-3{animation-delay:.46s}
+.animate-tilt{animation:tiltIn .5s cubic-bezier(.2,.9,.3,1) forwards}
+.animate-stagger > *{opacity:0; transform:translateY(8px)}
+.animate-stagger.animate-in > *{animation:fadeUp .5s forwards}
+.animate-stagger.animate-in > *:nth-child(1){animation-delay:.06s}
+.animate-stagger.animate-in > *:nth-child(2){animation-delay:.12s}
+.animate-stagger.animate-in > *:nth-child(3){animation-delay:.18s}
+.animate-stagger.animate-in > *:nth-child(4){animation-delay:.24s}
+.animate-stagger.animate-in > *:nth-child(5){animation-delay:.30s}
 
-        /* small responsive */
-        @media (max-width: 900px){
-            aside#filterSidebar{ display:none; }
-            .modal .modal-content{ max-width:95%; max-height:95vh; }
-        }
+/* hover shimmer on images */
+.preview-card::after{
+  content:"";
+  position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  background:linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.35), rgba(255,255,255,0));
+  background-size:200% 100%;
+  opacity:0; transition:opacity .35s;
+}
+.preview-card:hover::after{opacity:1; animation:shimmer 1.2s linear infinite}
 
-        /* accessibility focus */
-        button:focus, input:focus { outline: 3px solid rgba(99,102,241,0.18); outline-offset:2px; }
+/* page footer */
+.site-footer{padding:20px 0;color:var(--muted);border-top:1px solid rgba(15,23,42,0.04);margin-top:40px;}
 
-        /* autocomplete list */
-        .autocomplete-list{
-            position:absolute;
-            background:white;
-            border:1px solid #e5e7eb;
-            width:100%;
-            border-radius:8px;
-            margin-top:6px;
-            box-shadow:0 8px 24px rgba(2,6,23,0.06);
-            max-height:240px;
-            overflow:auto;
-            z-index:1600;
-        }
-        .autocomplete-item{
-            padding:8px 10px;
-            cursor:pointer;
-        }
-        .autocomplete-item:hover{ background:#f8fafc; }
-    </style>
+/* responsive */
+@media (max-width:920px){
+  .hero-inner{flex-direction:column;align-items:stretch}
+  .hero-right{width:100%;order:2}
+  .nav{display:none;position:absolute;right:18px;top:68px;background:#fff;padding:12px;border-radius:10px;box-shadow:0 12px 40px rgba(2,6,23,0.08)}
+  .nav-toggle{display:block;margin-left:auto;background:transparent;border:0}
+  .topbar-inner{position:relative}
+}
+
+/* small utilities */
+.chip{background:#fff;padding:6px 10px;border-radius:999px;border:1px solid rgba(15,23,42,0.04);font-weight:600;color:var(--muted)}
+.btn-ghost{background:transparent;border:1px solid rgba(15,23,42,0.06)}
+
+/* section visibility for single-file SPA */
+.page-section{display:none}
+.page-section.active{display:block}
+  </style>
 </head>
-<body>
-    <!-- Topbar: Search + Trending -->
-    <header style="background:var(--white); color:var(--text-dark); position:sticky; top:0; z-index:1200; padding:12px 20px; display:flex; align-items:center; gap:16px; border-bottom:1px solid #eef2f6;">
-        <div style="font-weight:700; font-size:1.1rem;">Template<span style="color:var(--primary-color);">Hub</span></div>
-        <div style="flex:1; display:flex; gap:8px; align-items:center; position:relative;">
-            <input id="searchInput" type="search" placeholder="Search templates, e.g. 'SaaS Landing'" style="flex:1; padding:10px 12px; border-radius:8px; border:1px solid #ccc;" autocomplete="off">
-            <div id="autocomplete" style="position:relative; min-width:200px;"></div>
-            <select id="sortSelect" style="padding:10px; border-radius:8px;">
-                <option value="popular">Most Popular</option>
-                <option value="newest">Newest</option>
-                <option value="updated">Recently Updated</option>
-                <option value="toprated">Top Rated</option>
-            </select>
-            <button id="openFiltersBtn" class="btn" style="background:transparent; border:1px solid rgba(15,23,42,0.06); color:var(--text-dark);">Filters</button>
-            <button id="openDashboardBtn" class="btn btn-primary">My Dashboard</button>
-        </div>
-        <div style="display:flex; gap:8px;">
-            <button id="uploadBtn" class="btn">Submit</button>
-        </div>
-    </header>
+<body class="page">
 
-    <main class="container" style="margin-top:18px; display:flex; gap:20px;">
-        <!-- Filter Sidebar -->
-        <aside id="filterSidebar" style="width:280px;">
-            <div style="background:var(--white); padding:16px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.03);">
-                <h3>Filters</h3>
-                <div style="margin-top:8px;">
-                    <label>Tech Stack</label>
-                    <div id="filterTech" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;"></div>
-                </div>
-                <div style="margin-top:12px;">
-                    <label>Category</label>
-                    <div id="filterCategory" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;"></div>
-                </div>
-                <div style="margin-top:12px;">
-                    <label>License</label>
-                    <div id="filterLicense" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;"></div>
-                </div>
-                <div style="margin-top:12px;">
-                    <label>Style</label>
-                    <div id="filterStyle" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;"></div>
-                </div>
-                <div style="margin-top:12px; display:flex; gap:8px;">
-                    <button id="clearFilters" class="btn btn-danger">Clear</button>
-                    <button id="applyFilters" class="btn btn-primary">Apply</button>
-                </div>
-            </div>
-            <div style="height:24px"></div>
-            <div style="background:var(--white); padding:12px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.03);">
-                <h4>Trending Searches</h4>
-                <div id="trending" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;"></div>
-            </div>
-        </aside>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="#home">Template<span>Hub</span></a>
 
-        <!-- Grid -->
-        <section style="flex:1;">
-            <div id="gridHeader" style="display:flex; justify-content:space-between; align-items:center;">
-                <h2>Templates</h2>
-                <div style="color:var(--text-light);">Showing <span id="resultsCount">0</span> results</div>
-            </div>
+      <nav class="nav" id="nav">
+        <a href="#home" class="nav-link" data-target="home">Home</a>
+        <a href="#templates" class="nav-link" data-target="templates">Templates</a>
+        <a href="#about" class="nav-link" data-target="about">About</a>
+        <a href="#submit" class="nav-link btn-ghost" data-target="submit">Submit</a>
+      </nav>
 
-            <div id="templateGrid" class="template-grid" style="margin-top:12px;"></div>
-        </section>
-    </main>
-
-    <!-- Preview Modal -->
-    <div id="previewModal" class="modal" style="display:none;">
-        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="previewTitle">
-            <div style="position:sticky; top:0; background:#fff; display:flex; gap:8px; align-items:center; padding:8px; justify-content:space-between; border-bottom:1px solid #eef2f6;">
-                <div style="display:flex; gap:8px; align-items:center;">
-                    <strong id="previewTitle"></strong>
-                    <span id="previewMeta" style="color:#64748b; font-size:0.9rem;"></span>
-                </div>
-                <div style="display:flex; gap:8px; align-items:center;">
-                    <select id="deviceSelect">
-                        <option value="desktop">Desktop</option>
-                        <option value="tablet">Tablet</option>
-                        <option value="mobile">Mobile</option>
-                    </select>
-                    <label style="display:flex; gap:6px; align-items:center;"><input type="checkbox" id="themeToggle">Dark</label>
-                    <button id="openFullBtn" class="btn btn-primary">Remove Frame</button>
-                    <button class="close-btn" id="closePreviewBtn" aria-label="Close preview">×</button>
-                </div>
-            </div>
-            <div id="previewHolder" style="padding:1rem; display:flex; justify-content:center;">
-                <iframe id="previewIframe" style="width:100%; height:80vh; border:1px solid #e5e7eb; border-radius:8px;" sandbox="allow-scripts allow-same-origin"></iframe>
-            </div>
-        </div>
+      <button id="navToggle" class="nav-toggle" aria-label="Toggle menu">
+        <span class="hamburger">☰</span>
+      </button>
     </div>
+  </header>
 
-    <!-- Details Modal -->
-    <div id="detailsModal" class="modal" style="display:none;">
-        <div class="modal-content" style="padding:16px; max-width:900px;">
-            <button class="close-btn" id="closeDetailsBtn" aria-label="Close details">×</button>
-            <div id="detailsBody"></div>
+  <main>
+    <!-- HOME -->
+    <section id="home" class="hero page-section active">
+      <div class="container hero-inner">
+        <div class="hero-left">
+          <h1 class="headline animate-fadeup">Discover beautiful, production-ready templates — built for speed and design.</h1>
+          <p class="subhead animate-fadeup delay-1">Browse curated templates, preview live demos, and download in a click. Crafted with modern stacks and delightful animations.</p>
+          <div class="hero-actions animate-fadeup delay-2">
+            <a href="#templates" class="btn btn-primary" data-target="templates">Browse Templates</a>
+            <a href="#submit" class="btn btn-outline" data-target="submit">Submit a Template</a>
+          </div>
+          <div class="trust animate-fadeup delay-3" style="margin-top:12px">
+            <span class="chip">Free</span>
+            <span class="chip">Open-source</span>
+            <span class="chip">Community-curated</span>
+          </div>
         </div>
-    </div>
 
-    <!-- Submission Modal -->
-    <div id="submissionModal" class="modal" style="display:none;">
-        <div class="modal-content" style="max-width:700px; padding:16px;">
-            <button class="close-btn" id="closeSubmissionBtn" aria-label="Close submission">×</button>
-            <h2>Submit a Template</h2>
-            <div class="input-group"><label>Title</label><input id="subTitle" type="text"></div>
-            <div class="input-group"><label>Repo URL (GitHub)</label><input id="subRepo" type="url"></div>
-            <div class="input-group"><label>Tech Stack (comma)</label><input id="subTech" type="text"></div>
-            <div class="input-group"><label>Category</label><input id="subCategory" type="text"></div>
-            <div class="input-group"><label>License</label><select id="subLicense"><option>MIT</option><option>Creative Commons</option><option>Paid</option></select></div>
-            <div class="input-group"><label>Thumbnail</label><input id="subThumb" type="file" accept="image/*"></div>
-            <div style="display:flex; gap:8px; margin-top:12px;"><button id="submitTemplateBtn" class="btn btn-primary">Submit</button><button class="btn" id="cancelSubmissionBtn">Cancel</button></div>
-        </div>
-    </div>
-
-    <!-- Dashboard Modal -->
-    <div id="dashboardModal" class="modal" style="display:none;">
-        <div class="modal-content" style="max-width:900px; padding:16px;">
-            <button class="close-btn" id="closeDashboardBtn" aria-label="Close dashboard">×</button>
-            <h2>My Dashboard</h2>
-            <div style="display:flex; gap:12px; flex-direction:column;">
-                <div>
-                    <h3>Saved for Later</h3>
-                    <div id="favList" class="item-list"></div>
-                </div>
-                <div>
-                    <h3>Download History</h3>
-                    <div id="downloadHistory" class="item-list"></div>
-                </div>
+        <div class="hero-right animate-float delay-2">
+          <div class="preview-card">
+            <img src="https://images.unsplash.com/photo-1547658709-3be05a9f3fb8?q=80&w=1200&auto=format&fit=crop" alt="Preview" />
+            <div class="preview-overlay">
+              <div class="preview-stats">
+                <div class="stat"><strong>2k</strong><small>Downloads</small></div>
+                <div class="stat"><strong>4.8</strong><small>Rating</small></div>
+              </div>
             </div>
+          </div>
+
+          <div class="mini-grid" style="margin-top:8px">
+            <div class="mini-card animate-tilt" style="--i:0;">Portfolio</div>
+            <div class="mini-card animate-tilt" style="--i:1;">Dashboard</div>
+            <div class="mini-card animate-tilt" style="--i:2;">Landing</div>
+          </div>
         </div>
+      </div>
+    </section>
+
+    <!-- TEMPLATES -->
+    <section id="templates" class="page-section">
+      <div class="container">
+        <h1 class="section-title animate-fadeup">Templates</h1>
+        <div id="allGrid" class="grid animate-stagger"></div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="page-section">
+      <div class="container">
+        <h1 class="section-title animate-fadeup">About Template Hub</h1>
+        <p class="subhead animate-fadeup delay-1">Template Hub is a community-driven collection of ready-to-use templates and small apps. We curate, test, and highlight templates that are well-documented and easy to fork.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:18px">
+          <div class="template-card animate-tilt">
+            <h3>Design-first</h3>
+            <p style="color:var(--muted)">We prioritize beautiful UI and clear UX patterns so every template is pleasant to use and easy to adapt.</p>
+          </div>
+          <div class="template-card animate-tilt" style="animation-delay:.08s">
+            <h3>Open Source</h3>
+            <p style="color:var(--muted)">Most templates are open-source. We encourage contributors to share fixes and improvements.</p>
+          </div>
+          <div class="template-card animate-tilt" style="animation-delay:.12s">
+            <h3>Performance</h3>
+            <p style="color:var(--muted)">Templates are evaluated for loading performance and accessibility basics.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUBMIT -->
+    <section id="submit" class="page-section">
+      <div class="container">
+        <h1 class="section-title animate-fadeup">Submit a Template</h1>
+        <form id="submitForm" class="template-card" style="max-width:780px">
+          <label style="display:block;margin-bottom:8px">Title</label>
+          <input name="title" type="text" placeholder="Template title" style="padding:10px;border-radius:8px;border:1px solid #e6edf3;width:100%;margin-bottom:12px" required>
+
+          <label style="display:block;margin-bottom:8px">Repository URL (GitHub)</label>
+          <input name="repo" type="url" placeholder="https://github.com/owner/repo" style="padding:10px;border-radius:8px;border:1px solid #e6edf3;width:100%;margin-bottom:12px" required>
+
+          <label>Tech Stack (comma separated)</label>
+          <input name="tech" type="text" placeholder="React, Tailwind" style="padding:10px;border-radius:8px;border:1px solid #e6edf3;width:100%;margin-bottom:12px">
+
+          <label>Short description</label>
+          <textarea name="desc" rows="4" placeholder="What does your template solve?" style="padding:10px;border-radius:8px;border:1px solid #e6edf3;width:100%;margin-bottom:12px"></textarea>
+
+          <div style="display:flex;gap:12px;align-items:center">
+            <button class="btn btn-primary" type="submit">Submit</button>
+            <a class="btn" href="#home">Cancel</a>
+          </div>
+          <div id="submitMsg" style="margin-top:12px;color:var(--muted)"></div>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div>© 2026 Template Hub • Built with care</div>
+      <div class="footer-links" style="margin-top:8px"><a href="#about">About</a> • <a href="#templates">Templates</a></div>
     </div>
+  </footer>
 
-    <footer style="padding:24px; text-align:center; color:var(--text-light);">&copy; 2026 Template Hub</footer>
+  <script>
+  // Combined scripts (navigation, animations, demo data)
+  document.addEventListener('DOMContentLoaded', ()=> {
+    // Mobile nav toggle
+    const navToggle = document.getElementById('navToggle');
+    const nav = document.getElementById('nav');
+    if (navToggle && nav){
+      navToggle.addEventListener('click', ()=> nav.classList.toggle('open'));
+    }
 
-    <script>
-        // CSS_VARS already injected via <style> above. Continue with JS.
+    // Hash navigation / SPA behavior
+    function showSection(id){
+      document.querySelectorAll('.page-section').forEach(s=> s.classList.remove('active'));
+      const el = document.getElementById(id);
+      if (el) el.classList.add('active');
+      // update active nav link
+      document.querySelectorAll('.nav-link').forEach(a=> a.classList.toggle('active', a.dataset.target===id));
+      // animate visible sections
+      requestAnimationFrame(()=> {
+        document.querySelectorAll('#'+id+' .animate-fadeup, #'+id+' .animate-stagger, #'+id+' .animate-tilt, #'+id+' .animate-float').forEach(el=> el.classList.add('animate-in'));
+      });
+    }
 
-        // Mock templates data (single source of truth for the grid). Replace with API in production.
-        const templatesData = [
-            {
-                id:'todo',
-                title:'To-Do Tracker',
-                description: 'A minimal to-do manager with drag & drop and local persistence.',
-                tech:['HTML','JS','Tailwind'],
-                category:'Dashboard',
-                license:'MIT',
-                style:['Minimalist'],
-                rating:4.6,
-                popularity:1250,
-                updated_at:'2026-01-19',
-                created_at:'2025-12-01',
-                image:'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1400&auto=format&fit=crop&ixlib=rb-4.0.3&s=1c8d2a2d6db6b2d9f6d6b3dc4f1c4a4b',
-                install: 'git clone https://github.com/example/todo && cd todo && npm install && npm run dev',
-                deps:['localForage','SortableJS'],
-                fileTree: {
-                    'index.html': null,
-                    'src': {
-                        'main.js': null,
-                        'components': {
-                            'App.js': null
-                        }
-                    },
-                    'package.json': null
-                },
-                demoUrl: 'https://example.com/demo-todo',
-                downloadUrl: 'https://github.com/example/todo'
-            },
-            {
-                id:'health',
-                title:'Health Tracker',
-                description: 'A health tracking dashboard with charts and analytics.',
-                tech:['Vue','Tailwind'],
-                category:'Dashboard',
-                license:'Creative Commons',
-                style:['Corporate'],
-                rating:4.2,
-                popularity:870,
-                updated_at:'2026-01-10',
-                created_at:'2025-10-12',
-                image:'https://images.unsplash.com/photo-1586773860413-6b3f7a6b7b2b?q=80&w=1400&auto=format&fit=crop&ixlib=rb-4.0.3&s=8c0b6f9e2f8f2abf6b2d3e5b0b0a9b9c',
-                install: 'git clone https://github.com/example/health && cd health && npm install && npm run dev',
-                deps:['Chart.js','Pinia'],
-                fileTree: {'index.html':null,'src':{'App.vue':null},'package.json':null},
-                demoUrl: 'https://example.com/demo-health',
-                downloadUrl: 'https://github.com/example/health'
-            },
-            {
-                id:'medicine',
-                title:'Medicine Tracker',
-                description: 'Prescription & intake tracker for small clinics.',
-                tech:['React','Bootstrap'],
-                category:'Dashboard',
-                license:'MIT',
-                style:['Minimalist'],
-                rating:4.0,
-                popularity:590,
-                updated_at:'2026-01-08',
-                created_at:'2025-09-20',
-                image:'https://images.unsplash.com/photo-1580281657527-6256f19f6b5f?q=80&w=1400&auto=format&fit=crop&ixlib=rb-4.0.3&s=5abfacd2a890c7a5c3b2c4a5f3b6a6cc',
-                install: 'git clone https://github.com/example/medicine && cd medicine && npm install && npm run dev',
-                deps:['React Router','Axios'],
-                fileTree: {'index.html':null,'src':{'index.js':null,'App.js':null},'package.json':null},
-                demoUrl: 'https://example.com/demo-medicine',
-                downloadUrl: 'https://github.com/example/medicine'
-            },
-            {
-                id:'portfolio',
-                title:'Portfolio Website',
-                description: 'A clean developer portfolio with dark mode and animations.',
-                tech:['HTML','Tailwind'],
-                category:'Portfolio',
-                license:'MIT',
-                style:['Minimalist','Dark Mode'],
-                rating:4.8,
-                popularity:2000,
-                updated_at:'2026-01-11',
-                created_at:'2025-07-28',
-                image:'https://images.unsplash.com/photo-1547658709-3be05a9f3fb8?q=80&w=1400&auto=format&fit=crop&ixlib=rb-4.0.3&s=9f6b2b6a5e3d8c0b6a2e6f7b4f3a2a2c',
-                install: 'download zip and open index.html',
-                deps:[],
-                fileTree: {'index.html':null,'assets':{'img.png':null}},
-                demoUrl: 'https://example.com/demo-portfolio',
-                downloadUrl: 'https://github.com/example/portfolio'
-            },
-            {
-                id:'gaming',
-                title:'Gaming Website',
-                description: 'Community portal for gamers with forums and leaderboards.',
-                tech:['HTML','JS','Bootstrap'],
-                category:'Community',
-                license:'Paid',
-                style:['Brutalist'],
-                rating:3.9,
-                popularity:430,
-                updated_at:'2025-12-01',
-                created_at:'2025-06-20',
-                image:'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1400&auto=format&fit=crop&ixlib=rb-4.0.3&s=3b7a2b2fd8c2b6c6e5b7d7c2a8b2c2d1',
-                install: 'download from dashboard',
-                deps:[],
-                fileTree: {'index.html':null},
-                demoUrl: 'https://example.com/demo-gaming',
-                downloadUrl: 'https://example.com/purchase-gaming'
-            },
-            {
-                id:'logo',
-                title:'Logo Creator',
-                description: 'Small canvas-based logo editor you can drop into sites.',
-                tech:['HTML','Canvas'],
-                category:'Tool',
-                license:'MIT',
-                style:['Minimalist'],
-                rating:4.3,
-                popularity:980,
-                updated_at:'2026-01-05',
-                created_at:'2025-08-10',
-                image:'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?q=80&w=1400&auto=format&fit=crop&ixlib=rb-4.0.3&s=6b4a7c3a9b2c3d4e5f6a7b8c9d0e1f2a',
-                install: 'git clone https://github.com/example/logo && cd logo && npm install && npm run dev',
-                deps:[],
-                fileTree: {'index.html':null,'src':{'logo.js':null}},
-                demoUrl: 'https://example.com/demo-logo',
-                downloadUrl: 'https://github.com/example/logo'
-            }
-        ];
+    function handleHash(){
+      const h = location.hash ? location.hash.replace('#','') : 'home';
+      showSection(h);
+    }
 
-        // localStorage keys
-        const FAV_KEY = 'templatehub_favs';
-        const DOWNLOAD_KEY = 'templatehub_downloads';
-        const SUBMIT_KEY = 'templatehub_submissions';
+    window.addEventListener('hashchange', handleHash);
+    // initial
+    handleHash();
 
-        // Cached state
-        let activeFilters = {tech: new Set(), category: new Set(), license: new Set(), style: new Set()};
-        let currentSort = 'popular';
-
-        // UI references
-        const grid = document.getElementById('templateGrid');
-        const resultsCount = document.getElementById('resultsCount');
-        const searchInput = document.getElementById('searchInput');
-        const autocomplete = document.getElementById('autocomplete');
-        const trendingEl = document.getElementById('trending');
-
-        // Trending queries
-        const TRENDING = ['SaaS Landing Page','React Dashboard','Tailwind Portfolio','E-commerce'];
-
-        // Render filter chips based on templatesData
-        function initFilters() {
-            const techSet = new Set();
-            const catSet = new Set();
-            const licSet = new Set();
-            const styleSet = new Set();
-            templatesData.forEach(t => {
-                (t.tech || t.tech.forEach) ? t.tech.forEach(x=>techSet.add(x)) : (t.tech || []).forEach(x=>techSet.add(x));
-                (t.tech || []).forEach(x=>techSet.add(x));
-                if (t.tech) t.tech.forEach(x=>techSet.add(x));
-                if (t.tech) {} // defensive
-                if (t.category) catSet.add(t.category);
-                if (t.license) licSet.add(t.license);
-                (t.style||[]).forEach(x=>styleSet.add(x));
-            });
-
-            // Build chips
-            buildFilterChips('filterTech', Array.from(techSet));
-            buildFilterChips('filterCategory', Array.from(catSet));
-            buildFilterChips('filterLicense', Array.from(licSet));
-            buildFilterChips('filterStyle', Array.from(styleSet));
-
-            document.getElementById('applyFilters').addEventListener('click', ()=>{ applyFilters(); renderGrid(); });
-            document.getElementById('clearFilters').addEventListener('click', ()=>{ activeFilters = {tech:new Set(), category:new Set(), license:new Set(), style:new Set()}; document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active')); renderGrid(); });
-
-            // trending
-            TRENDING.forEach(t=>{
-                const b = document.createElement('button');
-                b.className='chip';
-                b.textContent = t;
-                b.addEventListener('click',()=>{ searchInput.value=t; renderGrid(); });
-                trendingEl.appendChild(b);
-            });
+    // reveal-on-scroll observer
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in');
+          observer.unobserve(entry.target);
         }
+      });
+    }, {threshold: 0.12});
 
-        function buildFilterChips(containerId, items) {
-            const parent = document.getElementById(containerId);
-            if (!parent) return;
-            parent.innerHTML = '';
-            items.forEach(i=>{
-                const chip = document.createElement('button');
-                chip.className='chip';
-                chip.textContent = i;
-                chip.addEventListener('click', ()=>{
-                    chip.classList.toggle('active');
-                    // map container id to activeFilters key
-                    let key = '';
-                    if (containerId.includes('Tech')) key = 'tech';
-                    else if (containerId.includes('Category')) key = 'category';
-                    else if (containerId.includes('License')) key = 'license';
-                    else if (containerId.includes('Style')) key = 'style';
-                    if (!key) return;
-                    if (activeFilters[key].has(i)) activeFilters[key].delete(i);
-                    else activeFilters[key].add(i);
-                });
-                parent.appendChild(chip);
-            });
-        }
+    document.querySelectorAll('.animate-fadeup, .animate-stagger, .animate-float, .animate-tilt').forEach(el => observer.observe(el));
 
-        // Search autocomplete (simple)
-        searchInput.addEventListener('input', (e)=>{
-            const v = e.target.value.trim().toLowerCase();
-            autocomplete.innerHTML='';
-            if (!v) return;
-            const matches = templatesData.filter(t=>t.title.toLowerCase().includes(v) || (t.category||'').toLowerCase().includes(v)).slice(0,6);
-            if (!matches.length) return;
-            const list = document.createElement('div');
-            list.className='autocomplete-list';
-            matches.forEach(m=>{
-                const item = document.createElement('div');
-                item.className='autocomplete-item';
-                item.textContent = `${m.title} — ${m.category} (${m.tech.join(', ')})`;
-                item.addEventListener('click', ()=>{ searchInput.value = m.title; autocomplete.innerHTML=''; renderGrid(); });
-                list.appendChild(item);
-            });
-            autocomplete.appendChild(list);
-        });
+    // tiny hover tilt
+    document.querySelectorAll('.animate-tilt').forEach(el=>{
+      el.addEventListener('mousemove', (ev)=>{
+        const rect = el.getBoundingClientRect();
+        const cx = rect.left + rect.width/2;
+        const cy = rect.top + rect.height/2;
+        const dx = (ev.clientX - cx) / (rect.width/2);
+        const dy = (ev.clientY - cy) / (rect.height/2);
+        el.style.transform = `perspective(600px) rotateX(${(-dy*6)}deg) rotateY(${(dx*6)}deg) translateZ(6px)`;
+      });
+      el.addEventListener('mouseleave', ()=> el.style.transform = '');
+    });
 
-        // clicking outside of autocomplete closes it
-        document.addEventListener('click', (e)=>{
-            if (!autocomplete.contains(e.target) && e.target !== searchInput){
-                autocomplete.innerHTML = '';
-            }
-        });
+    // demo templates dataset + render into templates section
+    const DATA = [
+      {id:'portfolio', title:'Portfolio Website', image:'https://images.unsplash.com/photo-1547658709-3be05a9f3fb8?q=80&w=1200&auto=format&fit=crop', tech:['HTML','Tailwind'], category:'Portfolio', rating:4.8, downloads:2000},
+      {id:'dashboard', title:'SaaS Dashboard', image:'https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1200&auto=format&fit=crop', tech:['React','Chart.js'], category:'Dashboard', rating:4.6, downloads:1370},
+      {id:'landing', title:'SaaS Landing', image:'https://images.unsplash.com/photo-1506765515384-028b60a970df?q=80&w=1200&auto=format&fit=crop', tech:['Next','Tailwind'], category:'Landing', rating:4.7, downloads:980},
+      {id:'logo', title:'Logo Creator', image:'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?q=80&w=1200&auto=format&fit=crop', tech:['Canvas'], category:'Tool', rating:4.3, downloads:860},
+      {id:'ecom', title:'E‑commerce Starter', image:'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1200&auto=format&fit=crop', tech:['Vue','Stripe'], category:'E-commerce', rating:4.5, downloads:1240},
+      {id:'blog', title:'Minimal Blog', image:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop', tech:['Gatsby','MDX'], category:'Blog', rating:4.4, downloads:930}
+    ];
 
-        // Simple sort and filter pipeline
-        function applyFilters() {
-            // activeFilters used directly in renderGrid
-        }
+    const grid = document.getElementById('allGrid');
+    if (grid){
+      DATA.forEach((t,i)=>{
+        const c = document.createElement('article');
+        c.className = 'template-card';
+        c.style.animationDelay = `${i * 80}ms`;
+        c.innerHTML = `
+          <img src="${t.image}" alt="${t.title}">
+          <h4 style="margin:10px 0 6px">${t.title}</h4>
+          <div style="color:var(--muted);font-size:0.9rem">${t.category} • ${t.tech.join(', ')}</div>
+          <div style="display:flex;justify-content:space-between;margin-top:10px;align-items:center">
+            <div style="font-weight:700">${t.rating} ★</div>
+            <div>
+              <a class="btn" href="#" onclick="event.preventDefault()">Preview</a>
+              <a class="btn btn-primary" href="#" style="margin-left:8px" onclick="event.preventDefault()">Get Code</a>
+            </div>
+          </div>
+        `;
+        grid.appendChild(c);
+      });
+      requestAnimationFrame(()=> grid.classList.add('animate-in') );
+    }
 
-        function renderGrid() {
-            const q = searchInput.value.trim().toLowerCase();
-            let results = templatesData.filter(t=>{
-                if (q) {
-                    if (!(t.title.toLowerCase().includes(q) || (t.category||'').toLowerCase().includes(q) || (t.tech || t.techStack || []).join(' ').toLowerCase().includes(q))) return false;
-                }
-                if (activeFilters.tech.size && !((t.tech||t.techStack||[]).some(x=>activeFilters.tech.has(x)))) return false;
-                if (activeFilters.category.size && !activeFilters.category.has(t.category)) return false;
-                if (activeFilters.license.size && !activeFilters.license.has(t.license || t.license)) return false;
-                if (activeFilters.style.size && !((t.style||[]).some(x=>activeFilters.style.has(x)))) return false;
-                return true;
-            });
+    // submit form local save
+    const submitForm = document.getElementById('submitForm');
+    if (submitForm){
+      submitForm.addEventListener('submit', (e)=>{
+        e.preventDefault();
+        const form = e.target;
+        const title = form.title.value.trim();
+        const repo = form.repo.value.trim();
+        if(!title || !repo){ document.getElementById('submitMsg').textContent = 'Please provide title and repo URL'; return; }
+        const key = 'templatehub_submissions';
+        const subs = JSON.parse(localStorage.getItem(key)||'[]');
+        subs.unshift({id:'s_'+Date.now(), title, repo, tech: form.tech.value.split(',').map(s=>s.trim()).filter(Boolean), desc: form.desc.value, at: new Date().toISOString()});
+        localStorage.setItem(key, JSON.stringify(subs));
+        document.getElementById('submitMsg').textContent = 'Thanks — submission saved locally (in this demo).';
+        form.reset();
+      });
+    }
 
-            // sorting
-            if (currentSort === 'popular') results.sort((a,b)=> (b.popularity||0) - (a.popularity||0));
-            else if (currentSort === 'newest') results.sort((a,b)=> new Date(b.created_at) - new Date(a.created_at));
-            else if (currentSort === 'updated') results.sort((a,b)=> new Date(b.updated_at) - new Date(a.updated_at));
-            else if (currentSort === 'toprated') results.sort((a,b)=> (b.rating||0) - (a.rating||0));
-
-            grid.innerHTML='';
-            results.forEach(t=>{
-                const card = document.createElement('div');
-                card.className = 'template-card';
-                card.style.position='relative';
-                card.style.padding='12px';
-                card.style.borderRadius='12px';
-                card.style.cursor='pointer';
-
-                const techs = (t.tech||t.techStack||[]).map(tech=>`<span class="tech-badge" title="${escapeHtml(tech)}" style="margin-right:6px">${escapeHtml(tech)}</span>`).join('');
-                card.innerHTML = `
-                    <div style="position:relative;">
-                        <img src="${escapeHtml(t.image)}" alt="${escapeHtml(t.title)}" />
-                        <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity .2s; background:linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,0.35));" class="card-overlay">
-                            <button class="btn" data-action="preview" data-id="${escapeHtml(t.id)}">Preview</button>
-                        </div>
-                    </div>
-                    <div style="margin-top:10px; display:flex; justify-content:space-between; align-items:flex-start;">
-                        <div>
-                            <div style="font-size:1.05rem; font-weight:700;">${escapeHtml(t.title)}</div>
-                            <div style="color:var(--text-light); font-size:0.9rem; margin-top:4px;">${escapeHtml(t.category)} • ${escapeHtml(t.license)}</div>
-                        </div>
-                        <div style="text-align:right;">
-                            <div class="badge">${escapeHtml(t.price || (t.price === 0 ? 'Free' : 'Free'))}</div>
-                        </div>
-                    </div>
-                    <div style="margin-top:8px; color:var(--text-light);">Rating: ${t.rating} • ${t.popularity} downloads</div>
-                    <div style="margin-top:8px;">${techs}</div>
-                    <div style="position:absolute; right:12px; top:12px; display:flex; gap:8px;">
-                        <button class="btn" data-action="details" data-id="${escapeHtml(t.id)}">Details</button>
-                        <button class="btn" data-action="fav" data-id="${escapeHtml(t.id)}">☆</button>
-                    </div>
-                    <div style="margin-top:12px;"><button class="btn btn-primary" data-action="download" data-id="${escapeHtml(t.id)}">Get Code</button></div>
-                `;
-                // mouseover overlay show/hide
-                card.addEventListener('mouseenter', ()=>{ const o = card.querySelector('.card-overlay'); if (o) o.style.opacity = 1; });
-                card.addEventListener('mouseleave', ()=>{ const o = card.querySelector('.card-overlay'); if (o) o.style.opacity = 0; });
-
-                grid.appendChild(card);
-            });
-            resultsCount.textContent = results.length;
-
-            // attach actions
-            grid.querySelectorAll('[data-action="preview"]').forEach(b=>b.addEventListener('click',(e)=>{ openPreview(b.dataset.id); e.stopPropagation(); }));
-            grid.querySelectorAll('[data-action="details"]').forEach(b=>b.addEventListener('click',(e)=>{ openDetails(b.dataset.id); e.stopPropagation(); }));
-            grid.querySelectorAll('[data-action="fav"]').forEach(b=>b.addEventListener('click', (e)=>{ toggleFavorite(b.dataset.id); e.stopPropagation(); }));
-            grid.querySelectorAll('[data-action="download"]').forEach(b=>b.addEventListener('click', (e)=>{ const id=b.dataset.id; const t = templatesData.find(x=>x.id===id); if (t){ recordDownload(id, t.downloadUrl); window.open(t.downloadUrl,'_blank'); } e.stopPropagation(); }));
-        }
-
-        // Favorites
-        function getFavs(){ try { return JSON.parse(localStorage.getItem(FAV_KEY)||'[]'); } catch(e){ return []; } }
-        function toggleFavorite(id){
-            let favs = new Set(getFavs());
-            if (favs.has(id)) {
-                favs.delete(id);
-            } else {
-                favs.add(id);
-            }
-            localStorage.setItem(FAV_KEY, JSON.stringify(Array.from(favs)));
-            renderGrid();
-            renderDashboard();
-        }
-
-        // Preview
-        const previewModal = document.getElementById('previewModal');
-        const previewIframe = document.getElementById('previewIframe');
-        const previewTitle = document.getElementById('previewTitle');
-        const previewMeta = document.getElementById('previewMeta');
-        document.getElementById('deviceSelect').addEventListener('change', (e)=>{ setPreviewDevice(e.target.value); });
-        document.getElementById('themeToggle').addEventListener('change', (e)=>{ setPreviewTheme(e.target.checked ? 'dark' : 'light'); });
-        document.getElementById('openFullBtn').addEventListener('click', ()=>{ if (currentPreviewWindowUrl) window.open(currentPreviewWindowUrl, '_blank'); else window.open(previewIframe.src || '', '_blank'); });
-        document.getElementById('closePreviewBtn').addEventListener('click', closePreview);
-
-        let currentPreviewTemplate = null;
-        let currentPreviewWindowUrl = null;
-
-        function openPreview(id){
-            const t = templatesData.find(x=>String(x.id)===String(id));
-            if (!t) return;
-            currentPreviewTemplate = t;
-            previewTitle.textContent = t.title;
-            previewMeta.textContent = `${(t.tech||t.techStack||[]).join(', ')} • ${t.category}`;
-            previewModal.style.display='flex';
-
-            // If demoUrl can be embedded, use src; otherwise create a small srcdoc placeholder
-            // Use src when it isn't about:blank, but many external sites block framing via X-Frame-Options.
-            if (t.demoUrl && !t.demoUrl.startsWith('about:')) {
-                // Try to load as src; if blocked the iframe will show error - user can open full site.
-                previewIframe.src = t.demoUrl;
-                currentPreviewWindowUrl = t.demoUrl;
-            } else {
-                // Build a minimal srcdoc (fallback)
-                const baseHTML = `<!doctype html>
-                    <html>
-                    <head>
-                      <meta charset="utf-8" />
-                      <meta name="viewport" content="width=device-width,initial-scale=1" />
-                      <style>body{font-family:Inter,system-ui,Arial;margin:0;padding:24px;background:#fff;color:#111} h1{font-size:20px} .meta{color:#64748b}</style>
-                    </head>
-                    <body>
-                      <h1>${escapeHtml(t.title)}</h1>
-                      <div class="meta">${escapeHtml(t.description || '')}</div>
-                      <hr />
-                      <p>This is a local preview placeholder. In the deployed product replace this with the actual demo URL or a bundled preview.</p>
-                    </body>
-                    </html>`;
-                previewIframe.removeAttribute('src');
-                previewIframe.srcdoc = baseHTML;
-                currentPreviewWindowUrl = '';
-            }
-            setPreviewDevice(document.getElementById('deviceSelect').value);
-            // reset theme toggle
-            document.getElementById('themeToggle').checked = false;
-        }
-
-        function closePreview(){ previewModal.style.display='none'; try { previewIframe.src = ''; previewIframe.srcdoc = ''; } catch(e){} currentPreviewTemplate = null; currentPreviewWindowUrl = null; }
-
-        function setPreviewDevice(d){
-            if (!previewIframe) return;
-            if (d==='desktop'){ previewIframe.style.width='100%'; previewIframe.style.height='80vh'; previewIframe.style.maxWidth='100%'; }
-            else if (d==='tablet'){ previewIframe.style.width='900px'; previewIframe.style.height='80vh'; previewIframe.style.maxWidth='95%'; }
-            else if (d==='mobile'){ previewIframe.style.width='375px'; previewIframe.style.height='80vh'; previewIframe.style.maxWidth='95%'; }
-        }
-
-        function setPreviewTheme(theme){
-            // Try to inject a small script that toggles a class on the body of the iframe if same-origin or srcdoc.
-            try {
-                const doc = previewIframe.contentDocument || previewIframe.contentWindow.document;
-                if (!doc) return;
-                if (theme === 'dark') {
-                    doc.documentElement.style.background = '#0b1220';
-                    doc.body.style.background = '#0b1220';
-                    doc.body.style.color = '#e6eef8';
-                } else {
-                    doc.documentElement.style.background = '';
-                    doc.body.style.background = '';
-                    doc.body.style.color = '';
-                }
-            } catch (e) {
-                // cross-origin - cannot manipulate. nothing to do.
-                return;
-            }
-        }
-
-        // Details
-        function openDetails(id){
-            const t = templatesData.find(x=>String(x.id)===String(id));
-            if (!t) return;
-            const body = document.getElementById('detailsBody');
-            let html = `<h2>${escapeHtml(t.title)}</h2><p style="color:${varToHex('--text-light')};">${escapeHtml(t.description || '')}</p>`;
-            html += `<p><strong>Tech:</strong> ${(t.tech||t.techStack||[]).map(x=>`<span style="display:inline-block;margin-right:6px;padding:4px 6px;background:#f1f5f9;border-radius:6px">${escapeHtml(x)}</span>`).join('')}</p>`;
-            html += `<h3>Install</h3><div style="display:flex; gap:8px; align-items:center;"><code id="installCmd" style="background:#f8fafc;padding:8px;border-radius:6px;">${escapeHtml(t.install||'')}</code><button class="btn" id="copyInstallBtn">Copy</button></div>`;
-            html += `<h3>Dependencies</h3><ul>${(t.deps||[]).map(d=>`<li>${escapeHtml(d)}</li>`).join('')}</ul>`;
-            html += `<h3>File Structure</h3><div>${renderFileTree(t.fileTree)}</div>`;
-            html += `<h3>Live Demo</h3><div><a href="${escapeHtml(t.demoUrl||'#')}" target="_blank" rel="noreferrer">${escapeHtml(t.demoUrl||'No demo available')}</a></div>`;
-            body.innerHTML = html;
-            document.getElementById('detailsModal').style.display='flex';
-
-            // copy install
-            const copyBtn = document.getElementById('copyInstallBtn');
-            if (copyBtn) copyBtn.addEventListener('click', ()=>{ navigator.clipboard.writeText(t.install||'').then(()=> { copyBtn.textContent='Copied'; setTimeout(()=>copyBtn.textContent='Copy',1400); }); });
-        }
-        document.getElementById('closeDetailsBtn').addEventListener('click', closeDetails);
-        function closeDetails(){ document.getElementById('detailsModal').style.display='none'; }
-
-        function renderFileTree(tree){
-            if (!tree) return '<em>No files available</em>';
-            function walk(node){
-                if (node === null) return '<li><code>file</code></li>';
-                if (typeof node !== 'object') return `<li>${escapeHtml(String(node))}</li>`;
-                let out = '<ul style="font-family:monospace;margin-left:8px;">';
-                for (const k in node){
-                    const v = node[k];
-                    if (v && typeof v === 'object'){
-                        out += `<li><strong>${escapeHtml(k)}</strong>${walk(v)}</li>`;
-                    } else {
-                        out += `<li>${escapeHtml(k)}</li>`;
-                    }
-                }
-                out += '</ul>';
-                return out;
-            }
-            return walk(tree);
-        }
-
-        function varToHex(varName){
-            try {
-                return getComputedStyle(document.documentElement).getPropertyValue(varName) || '#64748b';
-            } catch(e){ return '#64748b'; }
-        }
-
-        // Dashboard
-        document.getElementById('openDashboardBtn').addEventListener('click', ()=>{ openDashboard(); });
-        document.getElementById('closeDashboardBtn').addEventListener('click', ()=>{ closeDashboard(); });
-        function openDashboard(){ const modal = document.getElementById('dashboardModal'); modal.style.display='flex'; renderDashboard(); }
-        function closeDashboard(){ document.getElementById('dashboardModal').style.display='none'; }
-        function renderDashboard(){
-            const favList = document.getElementById('favList'); favList.innerHTML='';
-            const favs = getFavs();
-            if (!favs.length) favList.innerHTML = '<div style="color:var(--text-light)">No saved templates</div>';
-            favs.forEach(id=>{
-                const t = templatesData.find(x=>x.id===id);
-                if (!t) return;
-                const row = document.createElement('div');
-                row.className='history-row';
-                row.innerHTML = `<div><strong>${escapeHtml(t.title)}</strong><div style="font-size:12px;color:var(--text-light)">${escapeHtml(t.category)}</div></div><div><button class="btn" data-action="open" data-id="${escapeHtml(id)}">Open</button> <button class="btn" data-action="remove" data-id="${escapeHtml(id)}">Remove</button></div>`;
-                favList.appendChild(row);
-            });
-            favList.querySelectorAll('[data-action="open"]').forEach(b=>b.addEventListener('click',(e)=>{ const id=b.dataset.id; openDetails(id); }));
-            favList.querySelectorAll('[data-action="remove"]').forEach(b=>b.addEventListener('click',(e)=>{ const id=b.dataset.id; let favs=new Set(getFavs()); favs.delete(id); localStorage.setItem(FAV_KEY, JSON.stringify(Array.from(favs))); renderDashboard(); renderGrid(); }));
-
-            const downloads = JSON.parse(localStorage.getItem(DOWNLOAD_KEY)||'[]');
-            const hist = document.getElementById('downloadHistory'); hist.innerHTML='';
-            if (!downloads.length) hist.innerHTML = '<div style="color:var(--text-light)">No downloads yet</div>';
-            downloads.forEach(d=>{
-                const t = templatesData.find(x=>x.id===d.id);
-                const row = document.createElement('div');
-                row.className='history-row';
-                row.innerHTML = `<div><strong>${escapeHtml(t ? t.title : d.id)}</strong><div style="font-size:12px;color:var(--text-light)">${escapeHtml(d.at)}</div></div><div><a href="${escapeHtml(d.url)}" target="_blank" class="btn">Open</a></div>`;
-                hist.appendChild(row);
-            });
-        }
-
-        // Submission
-        document.getElementById('uploadBtn').addEventListener('click', ()=>{ document.getElementById('submissionModal').style.display='flex'; });
-        document.getElementById('closeSubmissionBtn').addEventListener('click', closeSubmission);
-        document.getElementById('cancelSubmissionBtn').addEventListener('click', closeSubmission);
-        document.getElementById('submitTemplateBtn').addEventListener('click', async () => {
-            const title = document.getElementById('subTitle').value.trim();
-            const repo = document.getElementById('subRepo').value.trim();
-            const tech = document.getElementById('subTech').value.split(',').map(s=>s.trim()).filter(Boolean);
-            const category = document.getElementById('subCategory').value.trim();
-            const license = document.getElementById('subLicense').value;
-            if (!title || !repo) { alert('Please provide a title and repo URL'); return; }
-            const submissions = JSON.parse(localStorage.getItem(SUBMIT_KEY)||'[]');
-            submissions.unshift({id:'s_'+Date.now(), title, repo, tech, category, license, at:new Date().toLocaleString()});
-            localStorage.setItem(SUBMIT_KEY, JSON.stringify(submissions));
-            alert('Submitted — thank you! We will review the template.');
-            closeSubmission();
-        });
-        function closeSubmission(){ document.getElementById('submissionModal').style.display='none'; }
-
-        // Utility
-        function escapeHtml(unsafe){ return String(unsafe||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
-
-        // recordDownload for download history
-        function recordDownload(id, url){
-            try {
-                const hist = JSON.parse(localStorage.getItem(DOWNLOAD_KEY)||'[]');
-                hist.unshift({id, at:new Date().toLocaleString(), url});
-                // keep last 50
-                localStorage.setItem(DOWNLOAD_KEY, JSON.stringify(hist.slice(0,50)));
-                renderDashboard();
-            } catch(e){}
-        }
-
-        // init
-        initFilters();
-        renderGrid();
-
-        // global handlers to close modals when clicking outside
-        window.addEventListener('click', (e)=>{
-            ['previewModal','detailsModal','submissionModal','dashboardModal'].forEach(id=>{
-                const el = document.getElementById(id);
-                if (el && el.style.display === 'flex' && e.target === el){
-                    el.style.display = 'none';
-                }
-            });
-        });
-
-        // sort handler
-        document.getElementById('sortSelect').addEventListener('change', (e)=>{ currentSort = e.target.value; renderGrid(); });
-
-        // Keyboard escape closes open modals
-        window.addEventListener('keydown', (e)=>{
-            if (e.key === 'Escape'){
-                ['previewModal','detailsModal','submissionModal','dashboardModal'].forEach(id=>{
-                    const el = document.getElementById(id);
-                    if (el && el.style.display === 'flex') el.style.display = 'none';
-                });
-            }
-        });
-
-    </script>
+  });
+  </script>
 </body>
 </html>
