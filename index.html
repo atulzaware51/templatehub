@@ -667,6 +667,7 @@
         function closeModal() {
             const modal = document.getElementById('templateModal');
             modal.style.display = 'none';
+            // cleanup generated globals if needed
         }
 
         // Mobile Menu Toggle
@@ -705,96 +706,113 @@
             }
         }
 
-        // TO-DO TRACKER TEMPLATE
+        /* ---------------------------------------------
+           TO-DO TRACKER
+           --------------------------------------------- */
         function generateTodoTemplate() {
             return `
                 <div class="template-page">
                     <div class="template-nav">
-                        <button class="active" onclick="switchTodoPage('dashboard')">Dashboard</button>
-                        <button onclick="switchTodoPage('priorities')">Priorities</button>
-                        <button onclick="switchTodoPage('completed')">Completed</button>
-                        <button onclick="switchTodoPage('stats')">Statistics</button>
+                        <button class="active" onclick="switchTodoPage('dashboard', this)">Dashboard</button>
+                        <button onclick="switchTodoPage('priorities', this)">Priorities</button>
+                        <button onclick="switchTodoPage('completed', this)">Completed</button>
+                        <button onclick="switchTodoPage('stats', this)">Statistics</button>
                     </div>
                     
                     <div id="todoContent" class="template-content">
-                        <div id="todoDashboard">
-                            <h2>Task Dashboard</h2>
-                            <div class="input-group">
-                                <label>New Task</label>
-                                <input type="text" id="todoInput" placeholder="Enter task...">
-                            </div>
-                            <div class="input-group">
-                                <label>Priority</label>
-                                <select id="todoPriority">
-                                    <option value="low">Low</option>
-                                    <option value="medium">Medium</option>
-                                    <option value="high">High</option>
-                                </select>
-                            </div>
-                            <div class="input-group">
-                                <label>Due Date</label>
-                                <input type="date" id="todoDueDate">
-                            </div>
-                            <button class="btn btn-primary" onclick="addTodo()">Add Task</button>
-                            
-                            <div id="todoList" class="item-list" style="margin-top: 2rem;"></div>
-                        </div>
+                        ${todoDashboardHTML()}
                     </div>
                 </div>
             `;
         }
 
-        function switchTodoPage(page) {
+        function todoDashboardHTML() {
+            return `
+                <div id="todoDashboard">
+                    <h2>Task Dashboard</h2>
+                    <div class="input-group">
+                        <label>New Task</label>
+                        <input type="text" id="todoInput" placeholder="Enter task...">
+                    </div>
+                    <div class="input-group">
+                        <label>Priority</label>
+                        <select id="todoPriority">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Due Date</label>
+                        <input type="date" id="todoDueDate">
+                    </div>
+                    <button class="btn btn-primary" id="addTodoBtn">Add Task</button>
+                    
+                    <div id="todoList" class="item-list" style="margin-top: 2rem;"></div>
+                </div>
+            `;
+        }
+
+        function switchTodoPage(page, btn) {
             const content = document.getElementById('todoContent');
-            const buttons = document.querySelectorAll('.template-nav button');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            
+            // set active on the clicked button only within this modal
+            const nav = btn?.closest('.template-nav');
+            if (nav) {
+                nav.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            }
+
             switch(page) {
                 case 'dashboard':
-                    content.innerHTML = document.getElementById('todoDashboard').outerHTML;
+                    content.innerHTML = todoDashboardHTML();
+                    initializeTodoBindings();
+                    renderTodos();
                     break;
                 case 'priorities':
                     content.innerHTML = `
                         <h2>Priority Tasks</h2>
                         <div class="stats-grid">
-                            <div class="stat-card"><div class="stat-value">5</div><div class="stat-label">High Priority</div></div>
-                            <div class="stat-card"><div class="stat-value">12</div><div class="stat-label">Medium Priority</div></div>
-                            <div class="stat-card"><div class="stat-value">8</div><div class="stat-label">Low Priority</div></div>
+                            <div class="stat-card"><div class="stat-value" id="highCount">0</div><div class="stat-label">High Priority</div></div>
+                            <div class="stat-card"><div class="stat-value" id="mediumCount">0</div><div class="stat-label">Medium Priority</div></div>
+                            <div class="stat-card"><div class="stat-value" id="lowCount">0</div><div class="stat-label">Low Priority</div></div>
                         </div>
                     `;
+                    updatePriorityCounts();
                     break;
                 case 'completed':
-                    content.innerHTML = `<h2>Completed Tasks</h2><p style="color: #64748b;">No completed tasks yet. Keep working!</p>`;
+                    content.innerHTML = `<h2>Completed Tasks</h2><div id="completedList" class="item-list" style="margin-top:1rem;"></div>`;
+                    renderCompleted();
                     break;
                 case 'stats':
                     content.innerHTML = `
                         <h2>Statistics</h2>
                         <div class="stats-grid">
-                            <div class="stat-card"><div class="stat-value">25</div><div class="stat-label">Total Tasks</div></div>
-                            <div class="stat-card"><div class="stat-value">18</div><div class="stat-label">Active</div></div>
-                            <div class="stat-card"><div class="stat-value">7</div><div class="stat-label">Completed</div></div>
-                            <div class="stat-card"><div class="stat-value">72%</div><div class="stat-label">Completion Rate</div></div>
+                            <div class="stat-card"><div class="stat-value" id="totalTasks">0</div><div class="stat-label">Total Tasks</div></div>
+                            <div class="stat-card"><div class="stat-value" id="activeTasks">0</div><div class="stat-label">Active</div></div>
+                            <div class="stat-card"><div class="stat-value" id="completedTasks">0</div><div class="stat-label">Completed</div></div>
+                            <div class="stat-card"><div class="stat-value" id="completionRate">0%</div><div class="stat-label">Completion Rate</div></div>
                         </div>
                     `;
+                    updateStats();
                     break;
             }
         }
 
-        let todos = [];
+        let todos = JSON.parse(localStorage.getItem('templatehub_todos') || '[]');
         function addTodo() {
             const input = document.getElementById('todoInput');
             const priority = document.getElementById('todoPriority');
             const dueDate = document.getElementById('todoDueDate');
             
-            if (input.value.trim()) {
+            if (input && input.value.trim()) {
                 todos.push({
                     id: Date.now(),
-                    text: input.value,
+                    text: input.value.trim(),
                     priority: priority.value,
                     dueDate: dueDate.value,
                     completed: false
                 });
+                localStorage.setItem('templatehub_todos', JSON.stringify(todos));
                 renderTodos();
                 input.value = '';
             }
@@ -803,34 +821,113 @@
         function renderTodos() {
             const list = document.getElementById('todoList');
             if (!list) return;
-            
-            list.innerHTML = todos.map(todo => `
-                <div class="item-card">
+            list.innerHTML = '';
+            todos.filter(t => !t.completed).forEach(todo => {
+                const el = document.createElement('div');
+                el.className = 'item-card';
+                el.innerHTML = `
                     <div>
-                        <strong>${todo.text}</strong>
+                        <strong>${escapeHtml(todo.text)}</strong>
                         <div style="font-size: 0.9rem; color: #64748b;">
                             Priority: ${todo.priority} | Due: ${todo.dueDate || 'No deadline'}
                         </div>
                     </div>
-                    <button class="btn btn-success" onclick="completeTodo(${todo.id})">Done</button>
-                </div>
-            `).join('');
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <button class="btn btn-success" data-id="${todo.id}">Done</button>
+                        <button class="btn btn-danger" data-delete="${todo.id}">Delete</button>
+                    </div>
+                `;
+                list.appendChild(el);
+            });
+            // attach listeners
+            list.querySelectorAll('[data-id]').forEach(btn => btn.addEventListener('click', (e) => {
+                completeTodo(Number(btn.dataset.id));
+            }));
+            list.querySelectorAll('[data-delete]').forEach(btn => btn.addEventListener('click', (e) => {
+                deleteTodo(Number(btn.dataset.delete));
+            }));
         }
 
         function completeTodo(id) {
-            todos = todos.filter(t => t.id !== id);
+            todos = todos.map(t => t.id === id ? {...t, completed: true} : t);
+            localStorage.setItem('templatehub_todos', JSON.stringify(todos));
             renderTodos();
         }
 
-        // HEALTH TRACKER TEMPLATE
+        function deleteTodo(id) {
+            todos = todos.filter(t => t.id !== id);
+            localStorage.setItem('templatehub_todos', JSON.stringify(todos));
+            renderTodos();
+        }
+
+        function renderCompleted() {
+            const list = document.getElementById('completedList');
+            if (!list) return;
+            list.innerHTML = '';
+            todos.filter(t => t.completed).forEach(todo => {
+                const el = document.createElement('div');
+                el.className = 'item-card';
+                el.innerHTML = `
+                    <div>
+                        <strong>${escapeHtml(todo.text)}</strong>
+                        <div style="font-size: 0.9rem; color: #64748b;">
+                            Priority: ${todo.priority} | Due: ${todo.dueDate || 'No deadline'}
+                        </div>
+                    </div>
+                    <button class="btn btn-danger" data-restore="${todo.id}">Restore</button>
+                `;
+                list.appendChild(el);
+            });
+            list.querySelectorAll('[data-restore]').forEach(btn => btn.addEventListener('click', e => {
+                restoreTodo(Number(btn.dataset.restore));
+            }));
+        }
+
+        function restoreTodo(id) {
+            todos = todos.map(t => t.id === id ? {...t, completed: false} : t);
+            localStorage.setItem('templatehub_todos', JSON.stringify(todos));
+            renderCompleted();
+            renderTodos();
+        }
+
+        function updatePriorityCounts() {
+            const high = todos.filter(t => t.priority === 'high' && !t.completed).length;
+            const medium = todos.filter(t => t.priority === 'medium' && !t.completed).length;
+            const low = todos.filter(t => t.priority === 'low' && !t.completed).length;
+            const elHigh = document.getElementById('highCount');
+            const elMed = document.getElementById('mediumCount');
+            const elLow = document.getElementById('lowCount');
+            if (elHigh) elHigh.textContent = high;
+            if (elMed) elMed.textContent = medium;
+            if (elLow) elLow.textContent = low;
+        }
+
+        function updateStats() {
+            const total = todos.length;
+            const completedCount = todos.filter(t => t.completed).length;
+            const active = total - completedCount;
+            const rate = total === 0 ? 0 : Math.round((completedCount / total) * 100);
+            const elTotal = document.getElementById('totalTasks');
+            const elActive = document.getElementById('activeTasks');
+            const elCompleted = document.getElementById('completedTasks');
+            const elRate = document.getElementById('completionRate');
+            if (elTotal) elTotal.textContent = total;
+            if (elActive) elActive.textContent = active;
+            if (elCompleted) elCompleted.textContent = completedCount;
+            if (elRate) elRate.textContent = rate + '%';
+        }
+
+        /* ---------------------------------------------
+           HEALTH TRACKER
+           --------------------------------------------- */
         function generateHealthTemplate() {
             return `
                 <div class="template-page">
                     <div class="template-nav">
-                        <button class="active" onclick="switchHealthPage('dashboard')">Dashboard</button>
-                        <button onclick="switchHealthPage('activity')">Activity Log</button>
-                        <button onclick="switchHealthPage('goals')">Goals</button>
-                        <button onclick="switchHealthPage('reports')">Reports</button>
+                        <button class="active" onclick="switchHealthPage('dashboard', this)">Dashboard</button>
+                        <button onclick="switchHealthPage('activity', this)">Activity Log</button>
+                        <button onclick="switchHealthPage('goals', this)">Goals</button>
+                        <button onclick="switchHealthPage('reports', this)">Reports</button>
                     </div>
                     
                     <div id="healthContent" class="template-content">
@@ -864,19 +961,18 @@
                                 <label>Blood Pressure</label>
                                 <input type="text" id="bpInput" placeholder="120/80">
                             </div>
-                            <button class="btn btn-primary" onclick="logHealth()">Log Entry</button>
+                            <button class="btn btn-primary" id="logHealthBtn">Log Entry</button>
                         </div>
                     </div>
                 </div>
             `;
         }
 
-        function switchHealthPage(page) {
+        function switchHealthPage(page, btn) {
             const content = document.getElementById('healthContent');
-            const buttons = document.querySelectorAll('.template-nav button');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            
+            const nav = btn?.closest('.template-nav');
+            if (nav) { nav.querySelectorAll('button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
+
             switch(page) {
                 case 'activity':
                     content.innerHTML = `<h2>Activity Log</h2><p style="color: #64748b;">Track your daily activities and workouts</p>`;
@@ -887,6 +983,8 @@
                 case 'reports':
                     content.innerHTML = `<h2>Health Reports</h2><p style="color: #64748b;">View your progress over time</p>`;
                     break;
+                default:
+                    content.innerHTML = generateHealthTemplate();
             }
         }
 
@@ -894,15 +992,17 @@
             alert('Health data logged successfully!');
         }
 
-        // MEDICINE TRACKER TEMPLATE
+        /* ---------------------------------------------
+           MEDICINE TRACKER
+           --------------------------------------------- */
         function generateMedicineTemplate() {
             return `
                 <div class="template-page">
                     <div class="template-nav">
-                        <button class="active" onclick="switchMedicinePage('list')">Medications</button>
-                        <button onclick="switchMedicinePage('schedule')">Schedule</button>
-                        <button onclick="switchMedicinePage('reminders')">Reminders</button>
-                        <button onclick="switchMedicinePage('history')">History</button>
+                        <button class="active" onclick="switchMedicinePage('list', this)">Medications</button>
+                        <button onclick="switchMedicinePage('schedule', this)">Schedule</button>
+                        <button onclick="switchMedicinePage('reminders', this)">Reminders</button>
+                        <button onclick="switchMedicinePage('history', this)">History</button>
                     </div>
                     
                     <div id="medicineContent" class="template-content">
@@ -913,4 +1013,282 @@
                                 <input type="text" id="medicineInput" placeholder="Enter medicine name">
                             </div>
                             <div class="input-group">
-                                
+                                <label>Dosage</label>
+                                <input type="text" id="dosageInput" placeholder="e.g., 2 pills daily">
+                            </div>
+                            <button class="btn btn-primary" id="addMedicineBtn">Add Medicine</button>
+                        </div>
+                        <div id="medicineList" class="item-list"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        let medicines = JSON.parse(localStorage.getItem('templatehub_medicines') || '[]');
+        function switchMedicinePage(page, btn) {
+            const content = document.getElementById('medicineContent');
+            const nav = btn?.closest('.template-nav');
+            if (nav) { nav.querySelectorAll('button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
+
+            switch(page) {
+                case 'list':
+                    content.innerHTML = `
+                        <h2>Current Medications</h2>
+                        <div style="margin-bottom: 2rem;">
+                            <div class="input-group">
+                                <label>Medicine Name</label>
+                                <input type="text" id="medicineInput" placeholder="Enter medicine name">
+                            </div>
+                            <div class="input-group">
+                                <label>Dosage</label>
+                                <input type="text" id="dosageInput" placeholder="e.g., 2 pills daily">
+                            </div>
+                            <button class="btn btn-primary" id="addMedicineBtn">Add Medicine</button>
+                        </div>
+                        <div id="medicineList" class="item-list"></div>
+                    `;
+                    initializeMedicineBindings();
+                    renderMedicines();
+                    break;
+                case 'schedule':
+                    content.innerHTML = `<h2>Medicine Schedule</h2><p style="color:#64748b;">Create and manage dosage schedules.</p>`;
+                    break;
+                case 'reminders':
+                    content.innerHTML = `<h2>Reminders</h2><p style="color:#64748b;">Enable reminder notifications to stay on track.</p>`;
+                    break;
+                case 'history':
+                    content.innerHTML = `<h2>Prescription History</h2><p style="color:#64748b;">Review past medications and prescriptions.</p>`;
+                    break;
+            }
+        }
+
+        function initializeMedicineBindings() {
+            const addBtn = document.getElementById('addMedicineBtn');
+            addBtn?.addEventListener('click', () => {
+                const name = document.getElementById('medicineInput')?.value.trim();
+                const dosage = document.getElementById('dosageInput')?.value.trim();
+                if (!name) return;
+                medicines.push({id: Date.now(), name, dosage});
+                localStorage.setItem('templatehub_medicines', JSON.stringify(medicines));
+                renderMedicines();
+                document.getElementById('medicineInput').value = '';
+                document.getElementById('dosageInput').value = '';
+            });
+        }
+
+        function renderMedicines() {
+            const list = document.getElementById('medicineList');
+            if (!list) return;
+            list.innerHTML = '';
+            medicines.forEach(m => {
+                const el = document.createElement('div');
+                el.className = 'item-card';
+                el.innerHTML = `
+                    <div>
+                        <strong>${escapeHtml(m.name)}</strong>
+                        <div style="font-size:0.9rem;color:#64748b;">${escapeHtml(m.dosage)}</div>
+                    </div>
+                    <button class="btn btn-danger" data-delete="${m.id}">Remove</button>
+                `;
+                list.appendChild(el);
+            });
+            list.querySelectorAll('[data-delete]').forEach(btn => btn.addEventListener('click', () => {
+                medicines = medicines.filter(m => m.id !== Number(btn.dataset.delete));
+                localStorage.setItem('templatehub_medicines', JSON.stringify(medicines));
+                renderMedicines();
+            }));
+        }
+
+        /* ---------------------------------------------
+           WORK TRACKER (skeleton)
+           --------------------------------------------- */
+        function generateWorkTemplate() {
+            return `
+                <div class="template-page">
+                    <div class="template-nav">
+                        <button class="active" onclick="switchWorkPage('projects', this)">Projects</button>
+                        <button onclick="switchWorkPage('time', this)">Time Log</button>
+                        <button onclick="switchWorkPage('team', this)">Team</button>
+                    </div>
+                    <div id="workContent" class="template-content">
+                        <h2>Projects</h2>
+                        <p style="color:#64748b;">Create and manage projects, assign tasks and track progress.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function switchWorkPage(page, btn) {
+            const content = document.getElementById('workContent');
+            const nav = btn?.closest('.template-nav');
+            if (nav) { nav.querySelectorAll('button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
+
+            switch(page) {
+                case 'projects':
+                    content.innerHTML = `<h2>Projects</h2><p style="color:#64748b;">Project dashboard coming soon.</p>`;
+                    break;
+                case 'time':
+                    content.innerHTML = `<h2>Time Log</h2><p style="color:#64748b;">Track time spent on tasks.</p>`;
+                    break;
+                case 'team':
+                    content.innerHTML = `<h2>Team</h2><p style="color:#64748b;">Manage your team and roles.</p>`;
+                    break;
+            }
+        }
+
+        /* ---------------------------------------------
+           PORTFOLIO TEMPLATE
+           --------------------------------------------- */
+        function generatePortfolioTemplate() {
+            return `
+                <div class="template-page">
+                    <div class="template-nav">
+                        <button class="active" onclick="switchPortfolioPage('home', this)">Home</button>
+                        <button onclick="switchPortfolioPage('projects', this)">Projects</button>
+                        <button onclick="switchPortfolioPage('about', this)">About</button>
+                        <button onclick="switchPortfolioPage('contact', this)">Contact</button>
+                    </div>
+                    <div id="portfolioContent" class="template-content">
+                        <h2>Portfolio Homepage</h2>
+                        <p style="color:#64748b;">A clean landing to showcase your best work.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function switchPortfolioPage(page, btn) {
+            const content = document.getElementById('portfolioContent');
+            const nav = btn?.closest('.template-nav');
+            if (nav) { nav.querySelectorAll('button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
+
+            switch(page) {
+                case 'projects':
+                    content.innerHTML = `<h2>Projects Gallery</h2><p style="color:#64748b;">Show off your recent work with images and descriptions.</p>`;
+                    break;
+                case 'about':
+                    content.innerHTML = `<h2>About Me</h2><p style="color:#64748b;">Tell your story and skills.</p>`;
+                    break;
+                case 'contact':
+                    content.innerHTML = `<h2>Contact</h2><p style="color:#64748b;">Simple contact form placeholder.</p>`;
+                    break;
+                default:
+                    content.innerHTML = `<h2>Portfolio Homepage</h2><p style="color:#64748b;">A clean landing to showcase your best work.</p>`;
+            }
+        }
+
+        /* ---------------------------------------------
+           GAMING TEMPLATE (skeleton)
+           --------------------------------------------- */
+        function generateGamingTemplate() {
+            return `
+                <div class="template-page">
+                    <div class="template-nav">
+                        <button class="active" onclick="switchGamingPage('hub', this)">Game Hub</button>
+                        <button onclick="switchGamingPage('leaderboard', this)">Leaderboard</button>
+                        <button onclick="switchGamingPage('community', this)">Community</button>
+                    </div>
+                    <div id="gamingContent" class="template-content">
+                        <h2>Game Hub</h2>
+                        <p style="color:#64748b;">Central place for games and events.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function switchGamingPage(page, btn) {
+            const content = document.getElementById('gamingContent');
+            const nav = btn?.closest('.template-nav');
+            if (nav) { nav.querySelectorAll('button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
+
+            switch(page) {
+                case 'leaderboard':
+                    content.innerHTML = `<h2>Leaderboard</h2><p style="color:#64748b;">Top players and scores.</p>`;
+                    break;
+                case 'community':
+                    content.innerHTML = `<h2>Community Forum</h2><p style="color:#64748b;">Player discussions and news.</p>`;
+                    break;
+                default:
+                    content.innerHTML = `<h2>Game Hub</h2><p style="color:#64748b;">Central place for games and events.</p>`;
+            }
+        }
+
+        /* ---------------------------------------------
+           LOGO CREATOR (basic)
+           --------------------------------------------- */
+        function generateLogoTemplate() {
+            return `
+                <div class="template-page">
+                    <div class="template-nav">
+                        <button class="active" onclick="switchLogoPage('editor', this)">Editor</button>
+                        <button onclick="switchLogoPage('library', this)">Library</button>
+                        <button onclick="switchLogoPage('export', this)">Export</button>
+                    </div>
+                    <div id="logoContent" class="template-content">
+                        <h2>Logo Editor</h2>
+                        <p style="color:#64748b;">A simple canvas and color tools coming soon.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function switchLogoPage(page, btn) {
+            const content = document.getElementById('logoContent');
+            const nav = btn?.closest('.template-nav');
+            if (nav) { nav.querySelectorAll('button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
+
+            switch(page) {
+                case 'library':
+                    content.innerHTML = `<h2>Element Library</h2><p style="color:#64748b;">Icons and shapes to build logos.</p>`;
+                    break;
+                case 'export':
+                    content.innerHTML = `<h2>Export</h2><p style="color:#64748b;">Export options (PNG, SVG) will be available.</p>`;
+                    break;
+                default:
+                    content.innerHTML = `<h2>Logo Editor</h2><p style="color:#64748b;">A simple canvas and color tools coming soon.</p>`;
+            }
+        }
+
+        /* ---------------------------------------------
+           Initialization helpers
+           --------------------------------------------- */
+        function initializeTemplateInteractions(templateName) {
+            // Called after modal content is injected. Initialize bindings per template.
+            if (templateName === 'todo') {
+                initializeTodoBindings();
+                renderTodos();
+            }
+            if (templateName === 'health') {
+                document.getElementById('logHealthBtn')?.addEventListener('click', logHealth);
+            }
+            if (templateName === 'medicine') {
+                initializeMedicineBindings();
+                renderMedicines();
+            }
+            // other templates can be extended similarly
+        }
+
+        function initializeTodoBindings() {
+            const addBtn = document.getElementById('addTodoBtn');
+            if (addBtn) {
+                addBtn.removeEventListener('click', addTodo);
+                addBtn.addEventListener('click', addTodo);
+            }
+            // delegate Done and Delete are handled in renderTodos when list is present
+        }
+
+        function escapeHtml(unsafe) {
+            return String(unsafe)
+              .replace(/&/g, "&amp;")
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;")
+              .replace(/\"/g, "&quot;")
+              .replace(/'/g, "&#039;");
+        }
+
+        // run once to ensure any persisted state is loaded when visiting the page and modal opened later
+        document.addEventListener('DOMContentLoaded', () => {
+            // nothing to do yet, templates initialize when opened
+        });
+    </script>
+</body>
+</html>
