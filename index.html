@@ -3,474 +3,6 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Template Hub — Enhanced Edition</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-:root{--primary:#4f46e5;--accent:#ec4899;--text:#0f172a;--muted:#64748b;--bg:#fafbff;--card:#fff;--editor-bg:#1e1e2e;--editor-text:#e0def4}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Sora',system-ui;background:linear-gradient(135deg,#f8fafe,#f0f4ff);color:var(--text);line-height:1.6}
-.container{max-width:1200px;margin:0 auto;padding:24px}
-.topbar{position:sticky;top:0;background:rgba(255,255,255,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(15,23,42,0.06);z-index:50;box-shadow:0 2px 8px rgba(0,0,0,0.02)}
-.topbar-inner{display:flex;align-items:center;gap:16px;padding:16px 24px}
-.brand{font-weight:800;font-size:1.3rem;text-decoration:none;color:var(--text)}
-.brand span{background:linear-gradient(135deg,var(--primary),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.nav{display:flex;gap:12px;margin-left:auto}
-.nav-link{color:var(--muted);text-decoration:none;padding:8px 14px;border-radius:10px;font-weight:600;transition:all .2s}
-.nav-link.active{color:var(--text);background:rgba(79,70,229,0.08)}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:12px;border:1px solid rgba(15,23,42,0.08);cursor:pointer;text-decoration:none;background:transparent;font-weight:600;transition:all .25s;font-family:inherit}
-.btn-primary{background:linear-gradient(135deg,var(--primary),#7c3aed);color:#fff;border:0;box-shadow:0 12px 32px rgba(79,70,229,0.2)}
-.btn-primary:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(79,70,229,0.3)}
-.btn-outline{background:rgba(255,255,255,0.9);border:1px solid rgba(15,23,42,0.1)}
-.btn-outline:hover{background:#fff;transform:translateY(-2px)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:24px;margin-top:24px}
-.template-card{background:var(--card);border-radius:16px;padding:14px;box-shadow:0 20px 50px rgba(2,6,23,0.08);transition:all .3s;border:1px solid rgba(15,23,42,0.04)}
-.template-card:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 35px 90px rgba(2,6,23,0.15)}
-.template-card img{width:100%;height:180px;object-fit:cover;border-radius:12px;margin-bottom:12px}
-.template-card h3{font-size:1.1rem;margin-bottom:8px}
-.page-section{display:none}
-.page-section.active{display:block}
-.hero{padding:80px 0 40px;text-align:center}
-.headline{font-size:3rem;font-weight:800;margin-bottom:16px;background:linear-gradient(135deg,#1e293b,#4f46e5);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.subhead{color:var(--muted);font-size:1.2rem;margin-bottom:32px;max-width:700px;margin-left:auto;margin-right:auto}
-.template-view{display:grid;grid-template-columns:280px 1fr;min-height:calc(100vh - 80px)}
-.template-sidebar{background:linear-gradient(180deg,#fafbff,#f8f9fe);border-right:1px solid rgba(15,23,42,0.06);padding:24px;overflow-y:auto}
-.template-content{padding:32px;overflow-y:auto}
-.sidebar-nav{display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
-.sidebar-link{padding:12px 16px;border-radius:12px;text-decoration:none;color:var(--muted);font-weight:600;transition:all .2s;display:flex;align-items:center;gap:10px}
-.sidebar-link.active{background:linear-gradient(135deg,rgba(79,70,229,0.1),rgba(124,58,237,0.08));color:var(--primary)}
-.code-block{background:var(--editor-bg);color:var(--editor-text);padding:20px;border-radius:12px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:0.9rem;margin:16px 0}
-.editor-layout{display:grid;grid-template-rows:auto 1fr;height:calc(100vh - 80px)}
-.editor-toolbar{background:linear-gradient(135deg,#fafbff,#f8f9fe);padding:16px 24px;border-bottom:1px solid rgba(15,23,42,0.06);display:flex;gap:12px;align-items:center}
-.editor-main{display:grid;grid-template-columns:300px 1fr 1fr;height:100%;overflow:hidden}
-.editor-sidebar{background:linear-gradient(180deg,#fafbff,#f8f9fe);border-right:1px solid rgba(15,23,42,0.06);padding:20px;overflow-y:auto}
-.editor-code{background:var(--editor-bg);padding:20px;overflow:auto}
-.editor-preview{background:#fff;border-left:1px solid rgba(15,23,42,0.06);overflow:auto}
-.code-editor{width:100%;min-height:600px;background:transparent;border:0;outline:0;font-family:'JetBrains Mono',monospace;font-size:0.9rem;color:var(--editor-text);resize:none;line-height:1.6}
-.preview-frame{width:100%;height:100%;border:0}
-.editor-tabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:2px solid rgba(15,23,42,0.06)}
-.editor-tab{padding:10px 16px;border:0;background:transparent;color:var(--muted);font-weight:600;cursor:pointer;border-bottom:2px solid transparent}
-.editor-tab.active{color:var(--primary);border-bottom-color:var(--primary)}
-.guide-section{background:#fff;padding:16px;border-radius:12px;margin-bottom:12px;border:1px solid rgba(15,23,42,0.06)}
-.guide-section h4{margin:0 0 12px;font-size:0.95rem;color:var(--primary)}
-.guide-section ul{margin:0;padding-left:20px;font-size:0.85rem;color:var(--muted)}
-.guide-section li{margin-bottom:6px}
-.toast{position:fixed;right:24px;bottom:24px;background:linear-gradient(135deg,#1e293b,#0f172a);color:#fff;padding:14px 20px;border-radius:12px;box-shadow:0 16px 40px rgba(2,6,23,0.3);z-index:400;opacity:0;transform:translateY(12px);transition:all .3s;font-weight:600}
-.toast.show{opacity:1;transform:none}
-.chip-soft{background:rgba(79,70,229,0.08);padding:8px 14px;border-radius:999px;color:var(--primary);font-weight:700;font-size:0.85rem;display:inline-block}
-.badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font-size:0.8rem;font-weight:700;background:rgba(79,70,229,0.1);color:var(--primary)}
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
-.animate-fadeup{animation:fadeUp .6s ease forwards}
-@media (max-width:1024px){
-.template-view,.editor-main{grid-template-columns:1fr}
-.template-sidebar,.editor-sidebar{border-right:0;border-bottom:1px solid rgba(15,23,42,0.06)}
-.nav{display:none}
-}
-  </style>
-</head>
-<body>
-  <header class="topbar">
-    <div class="topbar-inner">
-      <a class="brand" href="#home">Template<span>Hub</span></a>
-      <nav class="nav">
-        <a href="#home" class="nav-link" data-target="home">Home</a>
-        <a href="#templates" class="nav-link" data-target="templates">Templates</a>
-        <a href="#submit" class="nav-link" data-target="submit">Submit</a>
-      </nav>
-    </div>
-  </header>
-
-  <main>
-    <!-- HOME -->
-    <section id="home" class="hero page-section active">
-      <div class="container">
-        <h1 class="headline animate-fadeup">Discover, View & Edit Beautiful Templates</h1>
-        <p class="subhead animate-fadeup">Browse curated templates with full source code access. View detailed code, edit in real-time with our built-in editor, and export your customizations.</p>
-        <div style="display:flex;gap:12px;justify-content:center;margin-bottom:32px">
-          <a href="#templates" class="btn btn-primary">Browse Templates</a>
-          <a href="#submit" class="btn btn-outline">Submit Template</a>
-        </div>
-        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-          <span class="chip-soft">✨ Free Forever</span>
-          <span class="chip-soft">🔓 Full Code Access</span>
-          <span class="chip-soft">🎨 Live Editor</span>
-          <span class="chip-soft">📦 Export Ready</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- TEMPLATES -->
-    <section id="templates" class="page-section">
-      <div class="container">
-        <h2 style="font-size:2rem;font-weight:800;margin-bottom:8px">Templates</h2>
-        <p style="color:var(--muted);margin-bottom:24px">Click "View" to explore code or "Edit" to customize in our live editor</p>
-        <div id="templatesGrid" class="grid"></div>
-      </div>
-    </section>
-
-    <!-- TEMPLATE VIEW -->
-    <section id="template-view" class="page-section">
-      <div class="template-view">
-        <aside class="template-sidebar">
-          <a href="#templates" class="btn btn-outline" style="width:100%;justify-content:center;margin-bottom:24px">← Back</a>
-          <nav class="sidebar-nav" id="viewTabs">
-            <a href="#" class="sidebar-link active" data-tab="overview">📋 Overview</a>
-            <a href="#" class="sidebar-link" data-tab="code">💻 Source Code</a>
-            <a href="#" class="sidebar-link" data-tab="components">🧩 Components</a>
-            <a href="#" class="sidebar-link" data-tab="styles">🎨 Styles</a>
-          </nav>
-          <button id="editTemplateBtn" class="btn btn-primary" style="width:100%;justify-content:center">✏️ Edit Template</button>
-        </aside>
-        <div class="template-content" id="viewContent"></div>
-      </div>
-    </section>
-
-    <!-- TEMPLATE EDITOR -->
-    <section id="template-editor" class="page-section">
-      <div class="editor-layout">
-        <div class="editor-toolbar">
-          <button id="backToView" class="btn btn-outline">← Back to View</button>
-          <div style="margin-left:auto;display:flex;gap:10px">
-            <button id="resetBtn" class="btn btn-outline">🔄 Reset</button>
-            <button id="updatePreviewBtn" class="btn btn-primary">👁️ Update Preview</button>
-            <button id="exportBtn" class="btn btn-outline">💾 Export HTML</button>
-          </div>
-        </div>
-        <div class="editor-main">
-          <aside class="editor-sidebar">
-            <h3 style="margin-bottom:16px;font-size:1.1rem">Editing Guide</h3>
-            <div class="guide-section">
-              <h4>✨ Quick Tips</h4>
-              <ul>
-                <li>Edit HTML, CSS, or JS in code panel</li>
-                <li>Click "Update Preview" to see changes</li>
-                <li>Auto-saves to browser storage</li>
-                <li>Use "Reset" to restore original</li>
-              </ul>
-            </div>
-            <div class="guide-section">
-              <h4>🎨 Customization Ideas</h4>
-              <ul>
-                <li>Change colors in CSS variables</li>
-                <li>Modify typography & fonts</li>
-                <li>Adjust spacing & layout</li>
-                <li>Add animations & transitions</li>
-              </ul>
-            </div>
-            <div class="guide-section">
-              <h4>🔧 Common Edits</h4>
-              <ul>
-                <li><strong>Colors:</strong> Look for :root{--primary}</li>
-                <li><strong>Text:</strong> Edit HTML directly</li>
-                <li><strong>Images:</strong> Replace image URLs</li>
-                <li><strong>Layout:</strong> grid/flex properties</li>
-              </ul>
-            </div>
-          </aside>
-          <div class="editor-code">
-            <div class="editor-tabs">
-              <button class="editor-tab active" data-code="html">HTML</button>
-              <button class="editor-tab" data-code="css">CSS</button>
-              <button class="editor-tab" data-code="js">JavaScript</button>
-            </div>
-            <textarea id="htmlEditor" class="code-editor"></textarea>
-            <textarea id="cssEditor" class="code-editor" style="display:none"></textarea>
-            <textarea id="jsEditor" class="code-editor" style="display:none"></textarea>
-          </div>
-          <div class="editor-preview">
-            <div style="padding:12px;background:linear-gradient(135deg,#fafbff,#f8f9fe);border-bottom:1px solid rgba(15,23,42,0.06)">
-              <strong style="font-size:0.9rem">Live Preview</strong>
-            </div>
-            <iframe id="previewFrame" class="preview-frame" sandbox="allow-scripts allow-same-origin"></iframe>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SUBMIT -->
-    <section id="submit" class="page-section">
-      <div class="container" style="max-width:700px">
-        <h2 style="font-size:2rem;font-weight:800;margin-bottom:24px">Submit a Template</h2>
-        <form id="submitForm" class="template-card">
-          <label style="display:block;margin-bottom:8px;font-weight:600">Title</label>
-          <input name="title" type="text" placeholder="Template title" required style="width:100%;padding:12px;border:1px solid rgba(15,23,42,0.08);border-radius:10px;margin-bottom:16px;font-family:inherit">
-          <label style="display:block;margin-bottom:8px;font-weight:600">Repository URL</label>
-          <input name="repo" type="url" placeholder="https://github.com/owner/repo" required style="width:100%;padding:12px;border:1px solid rgba(15,23,42,0.08);border-radius:10px;margin-bottom:16px;font-family:inherit">
-          <label style="display:block;margin-bottom:8px;font-weight:600">Tech Stack (comma separated)</label>
-          <input name="tech" type="text" placeholder="HTML, CSS, JavaScript" style="width:100%;padding:12px;border:1px solid rgba(15,23,42,0.08);border-radius:10px;margin-bottom:16px;font-family:inherit">
-          <label style="display:block;margin-bottom:8px;font-weight:600">Description</label>
-          <textarea name="desc" rows="4" placeholder="What does your template solve?" style="width:100%;padding:12px;border:1px solid rgba(15,23,42,0.08);border-radius:10px;margin-bottom:16px;font-family:inherit;resize:vertical"></textarea>
-          <div style="display:flex;gap:12px">
-            <button type="submit" class="btn btn-primary">Submit Template</button>
-            <a href="#home" class="btn btn-outline">Cancel</a>
-          </div>
-          <div id="submitMsg" style="margin-top:16px;color:var(--muted)"></div>
-        </form>
-      </div>
-    </section>
-  </main>
-
-  <div id="toast" class="toast"></div>
-
-  <script>
-const TEMPLATES={
-portfolio:{id:'portfolio',title:'Portfolio Website',image:'https://images.unsplash.com/photo-1547658709-3be05a9f3fb8?w=600',tech:['HTML','CSS','JavaScript'],category:'Portfolio',rating:4.7,downloads:2400,desc:'Modern portfolio with smooth animations',html:`<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>Portfolio</title></head>
-<body><div class="hero"><h1>Hi, I'm Jane Doe</h1><p>Creative Developer</p><button class="cta">View Work</button></div>
-<section class="projects"><h2>Projects</h2><div class="grid">
-<div class="card"><h3>Project 1</h3><p>Description here</p></div>
-<div class="card"><h3>Project 2</h3><p>Description here</p></div>
-</div></section></body></html>`,css:`:root{--primary:#6366f1;--text:#1e293b}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:system-ui;color:var(--text)}
-.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;text-align:center;padding:2rem}
-.hero h1{font-size:3rem;margin-bottom:1rem}
-.cta{padding:1rem 2rem;background:#fff;color:var(--primary);border:none;border-radius:50px;cursor:pointer;font-weight:700;font-size:1.1rem}
-.cta:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,0.2)}
-.projects{padding:4rem 2rem;max-width:1200px;margin:0 auto}
-.projects h2{font-size:2rem;margin-bottom:2rem;text-align:center}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2rem}
-.card{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,0.1);transition:transform .3s}
-.card:hover{transform:translateY(-8px)}`,js:`document.querySelector('.cta')?.addEventListener('click',()=>{
-document.querySelector('.projects').scrollIntoView({behavior:'smooth'});
-});
-console.log('Portfolio loaded!');`,components:[{name:'Hero',desc:'Full-screen hero with CTA'},{name:'Projects Grid',desc:'Responsive project showcase'}]},
-dashboard:{id:'dashboard',title:'SaaS Dashboard',image:'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600',tech:['HTML','CSS'],category:'Dashboard',rating:4.9,downloads:8400,desc:'Professional dashboard with charts',html:`<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>Dashboard</title></head>
-<body><div class="dashboard"><aside class="sidebar"><div class="logo">Dashboard</div><nav>
-<a href="#" class="active">Overview</a><a href="#">Analytics</a><a href="#">Reports</a>
-</nav></aside><main class="content"><h1>Welcome back</h1>
-<div class="stats"><div class="stat-card"><h3>Users</h3><p class="value">12,845</p><span class="up">+12%</span></div>
-<div class="stat-card"><h3>Revenue</h3><p class="value">$54,230</p><span class="up">+8%</span></div>
-</div></main></div></body></html>`,css:`:root{--primary:#4f46e5;--bg:#f8fafc}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:system-ui;background:var(--bg)}
-.dashboard{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
-.sidebar{background:#fff;border-right:1px solid #e2e8f0;padding:2rem 0}
-.logo{font-size:1.5rem;font-weight:800;padding:0 1.5rem;margin-bottom:2rem;color:var(--primary)}
-.sidebar a{display:block;padding:0.75rem 1.5rem;color:#64748b;text-decoration:none;transition:all .2s;border-left:3px solid transparent}
-.sidebar a:hover,.sidebar a.active{background:rgba(79,70,229,0.08);color:var(--primary);border-left-color:var(--primary)}
-.content{padding:2rem}
-.content h1{margin-bottom:2rem}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem}
-.stat-card{background:#fff;padding:1.5rem;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
-.stat-card h3{font-size:0.9rem;color:#64748b;margin-bottom:0.5rem}
-.value{font-size:2rem;font-weight:800;margin-bottom:0.5rem}
-.up{color:#10b981;font-weight:600;font-size:0.85rem}`,js:`console.log('Dashboard loaded');`,components:[{name:'Sidebar',desc:'Navigation sidebar'},{name:'Stat Cards',desc:'Metric displays'}]},
-landing:{id:'landing',title:'SaaS Landing',image:'https://images.unsplash.com/photo-1506765515384-028b60a970df?w=600',tech:['HTML','CSS','JavaScript'],category:'Landing',rating:4.6,downloads:1300,desc:'Conversion-optimized landing page',html:`<!DOCTYPE html>
-<html><head><meta charset="UTF-8"><title>SaaS Landing</title></head>
-<body><nav class="navbar"><div class="brand">Product</div><div class="links">
-<a href="#features">Features</a><a href="#pricing">Pricing</a><button class="btn">Get Started</button>
-</div></nav><section class="hero"><h1>Ship faster</h1><p>The all-in-one solution</p>
-<button class="cta">Start Free Trial</button></section>
-<section id="features" class="features"><h2>Why Choose Us</h2><div class="grid">
-<div class="feature"><div class="icon">⚡</div><h3>Fast</h3><p>Optimized performance</p></div>
-<div class="feature"><div class="icon">🔒</div><h3>Secure</h3><p>Enterprise security</p></div>
-<div class="feature"><div class="icon">📊</div><h3>Analytics</h3><p>Powerful insights</p></div>
-</div></section></body></html>`,css:`:root{--primary:#3b82f6}
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:system-ui}
-.navbar{display:flex;justify-content:space-between;align-items:center;padding:1.5rem 3rem;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.05)}
-.brand{font-size:1.5rem;font-weight:800;color:var(--primary)}
-.links{display:flex;gap:2rem;align-items:center}
-.links a{color:#1e293b;text-decoration:none;font-weight:500}
-.btn{background:var(--primary);color:#fff;border:none;padding:0.75rem 1.5rem;border-radius:8px;cursor:pointer;font-weight:600}
-.hero{text-align:center;padding:6rem 2rem;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff}
-.hero h1{font-size:3.5rem;margin-bottom:1rem}
-.hero p{font-size:1.5rem;margin-bottom:2rem;opacity:0.9}
-.cta{background:#fff;color:var(--primary);border:none;padding:1rem 2.5rem;font-size:1.1rem;border-radius:50px;cursor:pointer;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,0.2)}
-.cta:hover{transform:translateY(-3px)}
-.features{padding:5rem 2rem;max-width:1200px;margin:0 auto}
-.features h2{text-align:center;font-size:2.5rem;margin-bottom:3rem}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem}
-.feature{text-align:center;padding:2rem}
-.icon{font-size:3rem;margin-bottom:1rem}
-.feature h3{font-size:1.5rem;margin-bottom:0.5rem}
-.feature p{color:#64748b}`,js:`document.querySelector('.cta')?.addEventListener('click',()=>{
-alert('Trial started! (Demo)');
-});`,components:[{name:'Navbar',desc:'Sticky navigation'},{name:'Hero',desc:'Call-to-action section'},{name:'Features',desc:'Feature grid'}]}
-};
-
-const state={all:Object.values(TEMPLATES),current:null,tab:'overview'};
-const toast=document.getElementById('toast');
-
-function showToast(msg){toast.textContent=msg;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),3000)}
-function esc(s){return (s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-
-function renderTemplates(){
-const grid=document.getElementById('templatesGrid');
-if(!grid)return;
-grid.innerHTML=state.all.map(t=>`
-<div class="template-card">
-<img src="${t.image}" alt="${esc(t.title)}">
-<h3>${esc(t.title)}</h3>
-<div style="color:var(--muted);font-size:0.9rem;margin-bottom:12px">${esc(t.category)} • ${t.tech.slice(0,2).join(', ')}</div>
-<div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
-<div style="font-weight:700;color:var(--primary)">${t.rating}★</div>
-<div style="display:flex;gap:6px">
-<a href="#view/${t.id}" class="btn btn-outline" style="padding:6px 12px;font-size:0.85rem">View</a>
-<a href="#edit/${t.id}" class="btn btn-primary" style="padding:6px 12px;font-size:0.85rem">Edit</a>
-</div></div></div>
-`).join('');
-}
-
-function renderView(){
-const t=state.current;
-if(!t)return;
-const content=document.getElementById('viewContent');
-if(!content)return;
-const tabs={
-overview:`<div class="animate-fadeup">
-<h1 style="margin-bottom:12px;font-size:2.5rem;font-weight:800">${esc(t.title)}</h1>
-<div style="display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap">
-<span class="badge">${t.rating}★ Rating</span>
-<span class="badge">${t.downloads.toLocaleString()} Downloads</span>
-<span class="badge">${t.category}</span>
-</div>
-<img src="${t.image}" alt="${esc(t.title)}" style="width:100%;border-radius:16px;margin-bottom:24px;box-shadow:0 20px 60px rgba(0,0,0,0.12)">
-<h2 style="margin-bottom:12px;font-size:1.5rem">About</h2>
-<p style="color:var(--muted);line-height:1.8;margin-bottom:24px">${esc(t.desc)}</p>
-<h3 style="margin-bottom:12px">Tech Stack</h3>
-<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px">
-${t.tech.map(x=>`<span class="chip-soft">${esc(x)}</span>`).join('')}
-</div>
-<div style="display:flex;gap:12px">
-<a href="#edit/${t.id}" class="btn btn-primary">✏️ Edit Template</a>
-</div></div>`,
-code:`<div class="animate-fadeup">
-<h2 style="margin-bottom:20px;font-size:2rem">Source Code</h2>
-<h3 style="margin-top:24px;margin-bottom:12px">HTML</h3>
-<div class="code-block"><pre>${esc(t.html)}</pre></div>
-<h3 style="margin-top:24px;margin-bottom:12px">CSS</h3>
-<div class="code-block"><pre>${esc(t.css)}</pre></div>
-<h3 style="margin-top:24px;margin-bottom:12px">JavaScript</h3>
-<div class="code-block"><pre>${esc(t.js)}</pre></div>
-</div>`,
-components:`<div class="animate-fadeup">
-<h2 style="margin-bottom:20px;font-size:2rem">Components</h2>
-${t.components.map(c=>`<div class="guide-section">
-<h4>${esc(c.name)}</h4><p style="color:var(--muted);margin:0">${esc(c.desc)}</p>
-</div>`).join('')}
-</div>`,
-styles:`<div class="animate-fadeup">
-<h2 style="margin-bottom:20px;font-size:2rem">Styles & Theme</h2>
-<h3 style="margin-bottom:12px">CSS Variables</h3>
-<div class="code-block"><pre>${esc(t.css.match(/:root\s*{[^}]*}/)?.[0]||'/* No :root found */')}</pre></div>
-<h3 style="margin-top:24px;margin-bottom:12px">Full Stylesheet</h3>
-<div class="code-block"><pre>${esc(t.css)}</pre></div>
-</div>`
-};
-content.innerHTML=tabs[state.tab]||tabs.overview;
-}
-
-function initEditor(){
-const t=state.current;
-if(!t)return;
-const saved=JSON.parse(localStorage.getItem(`edit_${t.id}`)||'{}');
-const htmlEd=document.getElementById('htmlEditor');
-const cssEd=document.getElementById('cssEditor');
-const jsEd=document.getElementById('jsEditor');
-htmlEd.value=saved.html||t.html;
-cssEd.value=saved.css||t.css;
-jsEd.value=saved.js||t.js;
-
-const autoSave=()=>localStorage.setItem(`edit_${t.id}`,JSON.stringify({html:htmlEd.value,css:cssEd.value,js:jsEd.value}));
-htmlEd.oninput=cssEd.oninput=jsEd.oninput=autoSave;
-
-document.querySelectorAll('.editor-tab').forEach(tab=>{
-tab.onclick=()=>{
-document.querySelectorAll('.editor-tab').forEach(t=>t.classList.remove('active'));
-tab.classList.add('active');
-htmlEd.style.display=cssEd.style.display=jsEd.style.display='none';
-const type=tab.dataset.code;
-if(type==='html')htmlEd.style.display='block';
-if(type==='css')cssEd.style.display='block';
-if(type==='js')jsEd.style.display='block';
-};
-});
-
-document.getElementById('updatePreviewBtn').onclick=()=>{
-const frame=document.getElementById('previewFrame');
-const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>${cssEd.value}</style></head><body>${htmlEd.value}<script>${jsEd.value}<\/script></body></html>`;
-frame.src='data:text/html;charset=utf-8,'+encodeURIComponent(html);
-showToast('Preview updated!');
-};
-
-document.getElementById('resetBtn').onclick=()=>{
-if(confirm('Reset to original?')){
-htmlEd.value=t.html;cssEd.value=t.css;jsEd.value=t.js;
-localStorage.removeItem(`edit_${t.id}`);
-showToast('Reset complete');
-}
-};
-
-document.getElementById('exportBtn').onclick=()=>{
-const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${esc(t.title)}</title><style>${cssEd.value}</style></head><body>${htmlEd.value}<script>${jsEd.value}<\/script></body></html>`;
-const blob=new Blob([html],{type:'text/html'});
-const a=document.createElement('a');
-a.href=URL.createObjectURL(blob);
-a.download=`${t.id}-edited.html`;
-a.click();
-showToast('Exported!');
-};
-
-document.getElementById('backToView').onclick=()=>location.hash=`view/${t.id}`;
-
-const frame=document.getElementById('previewFrame');
-const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>${cssEd.value}</style></head><body>${htmlEd.value}<script>${jsEd.value}<\/script></body></html>`;
-frame.src='data:text/html;charset=utf-8,'+encodeURIComponent(html);
-}
-
-function route(){
-const h=location.hash.slice(1)||'home';
-document.querySelectorAll('.page-section').forEach(s=>s.classList.remove('active'));
-document.querySelectorAll('.nav-link').forEach(a=>a.classList.toggle('active',a.dataset.target===h.split('/')[0]));
-
-if(h.startsWith('view/')){
-state.current=state.all.find(t=>t.id===h.split('/')[1]);
-if(state.current){
-document.getElementById('template-view').classList.add('active');
-state.tab='overview';
-document.querySelectorAll('#viewTabs .sidebar-link').forEach((l,i)=>l.classList.toggle('active',i===0));
-renderView();
-return;
-}
-}
-
-if(h.startsWith('edit/')){
-state.current=state.all.find(t=>t.id===h.split('/')[1]);
-if(state.current){
-document.getElementById('template-editor').classList.add('active');
-setTimeout(initEditor,100);
-return;
-}
-}
-
-const sec=document.getElementById(h);
-if(sec)sec.classList.add('active');
-else document.getElementById('home').classList.add('active');
-
-if(h==='templates')renderTemplates();
-}
-
-document.getElementById('viewTabs')?.addEventListener('click',e=>{
-const link=e.target.closest('.sidebar-link');
-if(link){
-e.preventDefault();
-state.tab=link.dataset.tab;
-document.querySelectorAll('#viewTabs .sidebar-link').forEach(l=>l.classList.remove('active'));
-link.classList.add('active');
-renderView();
-}
-});
-
-document.getElementById('submitForm')?.addEventListener('submit',e=>{
-e.preventDefault();
-showToast('Submission saved! (Demo mode)');<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Template Hub — Complete Edition</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -965,7 +497,6 @@ body {
   </header>
 
   <main>
-    <!-- HOME -->
     <section id="home" class="hero page-section active">
       <div class="container">
         <h1 class="headline animate-fadeup">Discover, View & Edit Beautiful Templates</h1>
@@ -984,7 +515,6 @@ body {
       </div>
     </section>
 
-    <!-- TEMPLATES -->
     <section id="templates" class="page-section">
       <div class="container">
         <h2 style="font-size:2rem;font-weight:800;margin-bottom:8px;">Templates</h2>
@@ -993,7 +523,6 @@ body {
       </div>
     </section>
 
-    <!-- TEMPLATE VIEW -->
     <section id="template-view" class="page-section">
       <div class="template-view">
         <aside class="template-sidebar">
@@ -1012,7 +541,6 @@ body {
       </div>
     </section>
 
-    <!-- TEMPLATE EDITOR -->
     <section id="template-editor" class="page-section">
       <div class="editor-layout">
         <div class="editor-toolbar">
@@ -1096,7 +624,6 @@ body {
         </div>
       </div>
 
-      <!-- Visual Editor Panel -->
       <div id="visualEditor" class="visual-editor">
         <h4 style="margin-bottom:16px;">🎨 Visual Controls</h4>
         <div class="control-group">
@@ -1130,7 +657,6 @@ body {
       </div>
     </section>
 
-    <!-- Fullscreen Preview Overlay -->
     <div id="fullscreenOverlay" class="fullscreen-overlay">
       <div style="padding:16px;background:#fff;border-bottom:1px solid rgba(15,23,42,0.06);display:flex;justify-content:space-between;align-items:center;">
         <strong>Fullscreen Preview</strong>
@@ -1139,7 +665,6 @@ body {
       <iframe id="fullscreenFrame" style="width:100%;height:calc(100% - 60px);border:0;"></iframe>
     </div>
 
-    <!-- SUBMIT -->
     <section id="submit" class="page-section">
       <div class="container" style="max-width:700px;">
         <h2 style="font-size:2rem;font-weight:800;margin-bottom:24px;">Submit a Template</h2>
@@ -1969,7 +1494,7 @@ function initEditor() {
         color: { css: '\n/* Change primary color */\n:root {\n  --primary: #your-color-here;\n}\n' },
         font: { css: '\n/* Change font */\nbody {\n  font-family: \'Your Font\', sans-serif;\n}\n' },
         spacing: { css: '\n/* Adjust spacing */\n.element {\n  padding: 2rem;\n  margin: 1rem;\n}\n' },
-        image: { html: '\n<!-- Replace image -->\n<img src="your-image-url.jpg" alt="description">\n' }
+        image: { html: '\n\n<img src="your-image-url.jpg" alt="description">\n' }
       };
       
       if (snippets[type] && snippets[type][activeTab]) {
@@ -2195,18 +1720,6 @@ document.querySelectorAll('[data-target]').forEach(function(el) {
 });
 
 window.onhashchange = route;
-route();
-  </script>
-</body>
-</html>
-e.target.reset();
-});
-
-document.querySelectorAll('[data-target]').forEach(el=>{
-el.onclick=e=>{e.preventDefault();location.hash=el.dataset.target};
-});
-
-window.onhashchange=route;
 route();
   </script>
 </body>
