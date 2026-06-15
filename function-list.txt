@@ -1,0 +1,172 @@
+TemplateHub Function List
+=========================
+
+1. app.init()
+   - Entry point for the frontend application.
+   - Loads saved templates from localStorage or API, renders the gallery, and initializes the editor.
+
+2. app.loadSavedTemplates()
+   - Attempts to fetch saved templates from the backend API.
+   - Falls back to localStorage when the server is unavailable.
+
+3. app.getLocalTemplates()
+   - Reads saved templates from localStorage.
+
+4. app.persistLocalTemplates(templates)
+   - Saves template data to localStorage.
+
+5. app.renderGallery()
+   - Renders the home screen template cards.
+
+6. app.openTemplate(id)
+   - Opens a selected template in the editor view.
+
+7. app.navigate(view)
+   - Switches between home and editor views.
+
+8. app.openSaveModal()
+   - Shows the save modal and prepopulates the project name.
+
+9. app.closeSaveModal()
+   - Hides the save modal.
+
+10. app.createNewProject()
+    - Creates a new blank template project and opens the editor.
+
+11. app.confirmSave()
+    - Saves the current project locally and optionally syncs with the server.
+
+12. app.saveTemplateToServer(template)
+    - Sends a POST request to /api/templates to persist the template.
+
+13. app.resetSavedTemplates()
+    - Clears saved templates locally and on the server when available.
+
+14. app.setupCommandPalette()
+    - Initializes command palette keyboard handling and UI.
+
+15. app.renderCommands()
+    - Displays the list of quick commands.
+
+16. app.executeCommand(id)
+    - Executes a command by id and closes the palette.
+
+17. app.filterCommands()
+    - Filters command palette items by query text.
+
+18. app.toggleCommandPalette()
+    - Toggles the command palette overlay.
+
+19. editor.init()
+    - Initializes editor controls, event listeners, and loads the home screen.
+
+20. editor.attachIframeListener()
+    - Listens for selection events from the preview iframe.
+
+21. editor.loadTemplate(template)
+    - Loads a template project into the editor state.
+
+22. editor.renderComponentPalette()
+    - Renders draggable component snippets in the Add panel.
+
+23. editor.renderCustomComponents()
+    - Displays saved custom components in the Add panel.
+
+24. editor.renderPageList()
+    - Renders the page list in the Pages panel.
+
+25. editor.renderEditorHeader()
+    - Updates the editor header with current page info.
+
+26. editor.switchTab(tabId)
+    - Switches the sidebar panel tabs.
+
+27. editor.getActivePage()
+    - Returns the active page object.
+
+28. editor.switchPage(slug)
+    - Changes the active editing page.
+
+29. editor.addPage()
+    - Adds a new page to the project.
+
+30. editor.insertSnippet(type)
+    - Appends a snippet block to the current page HTML.
+
+31. editor.insertCustomComponent(index)
+    - Inserts a saved custom component into the page.
+
+32. editor.startDrag(event, type)
+    - Begins a drag event for a component snippet.
+
+33. editor.handleDrop(event)
+    - Drops a dragged component into the editor canvas.
+
+34. editor.updatePreview()
+    - Renders the active page inside the iframe preview.
+
+35. editor.addUidAttributes(html)
+    - Adds unique IDs to elements so they can be selected later.
+
+36. editor.handleSelection(payload)
+    - Updates the inspector UI when an iframe element is selected.
+
+37. editor.extractPixels(value)
+    - Extracts numeric pixel values from CSS strings.
+
+38. editor.rgbToHex(rgbValue)
+    - Converts rgb/rgba CSS values to hex color codes.
+
+39. editor.applyToSelectedElement(modifier)
+    - Applies a modification function to the currently selected element in page HTML.
+
+40. editor.updateStyle(property, value)
+    - Updates a selected element's inline CSS style.
+
+41. editor.updateClasses(value)
+    - Updates a selected element's class attribute.
+
+42. editor.clearPage()
+    - Clears the current page contents and resets selection.
+
+43. editor.autoResponsive()
+    - Adds a simple responsive media query to project CSS.
+
+44. editor.pushHistory()
+    - Pushes state changes into the undo/redo stack.
+
+45. editor.undo()
+    - Restores the previous project state.
+
+46. editor.redo()
+    - Restores the next project state.
+
+47. editor.saveSelectionAsComponent()
+    - Saves the currently selected preview element as a custom component.
+
+48. editor.wrapSelection()
+    - Wraps the selected element in a styled container.
+
+49. editor.deleteSelection()
+    - Deletes the selected element from page HTML.
+
+50. editor.clearSelection()
+    - Clears selection state in the inspector.
+
+51. editor.addAsset(src)
+    - Adds an uploaded asset URL to the asset library.
+
+52. editor.uploadAsset(input)
+    - Reads an uploaded image file and stores it for insertion.
+
+53. editor.renderAssets()
+    - Renders uploaded images in the Assets tab.
+
+54. editor.insertImageAsset(src)
+    - Inserts an uploaded image into the current page.
+
+55. editor.exportCode()
+    - Zips project pages and triggers a download.
+
+56. editor.showToast(message)
+    - Displays a temporary toast message.

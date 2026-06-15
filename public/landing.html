@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Landing page for TemplateHub (SaaS style) -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TemplateHub — Visual Website Builder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .hero { padding: 80px 20px; text-align: center; }
+    .hero h1 { font-size: 3rem; margin-bottom: 12px; }
+    .hero p { color: #6b7280; margin-bottom: 24px; }
+    .cta { display: inline-flex; gap: 12px; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand" style="cursor:default">
+      <span class="brand-logo">T</span>
+      <div>
+        <strong>TemplateHub</strong>
+        <small>Modern + Classic UI Builder</small>
+      </div>
+    </div>
+    <nav>
+      <a href="/gallery" class="btn">Templates</a>
+      <a href="/editor" class="btn">Open Editor</a>
+    </nav>
+  </header>
+
+  <main class="hero">
+    <h1>Build beautiful websites, faster.</h1>
+    <p>Design visually, export clean HTML, and manage templates for your team.</p>
+    <div class="cta">
+      <a class="btn primary" href="/editor">Start Building — Free</a>
+      <a class="btn" href="/gallery">Browse Templates</a>
+    </div>
+  </main>
+
+  <section style="padding:40px; max-width:1100px; margin:0 auto;">
+    <h2 style="text-align:center; margin-bottom:16px;">Why TemplateHub</h2>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:20px;">
+      <div class="card"><h3>Visual Editor</h3><p class="muted">Drag, drop and style components visually.</p></div>
+      <div class="card"><h3>Team Ready</h3><p class="muted">Save templates and share across projects.</p></div>
+      <div class="card"><h3>Export</h3><p class="muted">Export pages as static HTML ZIPs.</p></div>
+    </div>
+  </section>
+
+  <footer style="padding:24px; text-align:center; color:var(--muted);">© TemplateHub</footer>
+</body>
+</html>

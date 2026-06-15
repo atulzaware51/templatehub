@@ -1,0 +1,489 @@
+/*
+  public/styles.css
+  ----------------
+  Modern and classic friendly UI styles for TemplateHub.
+  Contains responsive layout, card system, controls, and editor visuals.
+*/
+
+:root {
+  --bg: #f3f4f6;
+  --surface: #ffffff;
+  --surface-strong: #f8fafc;
+  --text: #111827;
+  --muted: #6b7280;
+  --border: #d1d5db;
+  --primary: #4f46e5;
+  --primary-soft: #eef2ff;
+  --danger: #dc2626;
+  --radius: 18px;
+  --shadow: 0 18px 60px rgba(15, 23, 42, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(180deg, #eef2ff 0%, #f8fafc 100%);
+  color: var(--text);
+}
+
+button, input, select {
+  font: inherit;
+}
+
+button {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(79, 70, 229, 0.35);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: white;
+  color: var(--text);
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 32px;
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px solid rgba(209, 213, 219, 0.8);
+  backdrop-filter: blur(16px);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+}
+
+.brand-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.brand strong {
+  display: block;
+  font-size: 1.15rem;
+}
+
+.brand small {
+  color: var(--muted);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.tool-btn,
+.btn,
+.small-btn {
+  padding: 10px 16px;
+  border-radius: 999px;
+}
+
+.tool-button.primary,
+.btn.primary,
+.small-btn.primary {
+  background: var(--primary);
+  color: white;
+  border-color: transparent;
+}
+
+.btn.secondary,
+.small-btn.secondary {
+  background: var(--surface-strong);
+  color: var(--text);
+}
+
+.btn.danger,
+.small-btn.danger {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.content-area {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.view {
+  width: 100%;
+  padding: 32px;
+  display: none;
+}
+
+.view.active {
+  display: block;
+}
+
+.home-header,
+.editor-header,
+.preview-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.home-header h1,
+.editor-header h2 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.home-actions,
+.page-actions,
+.breakpoint-buttons,
+.modal-actions,
+.selection-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.template-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 26px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.template-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(79, 70, 229, 0.25);
+}
+
+.template-preview {
+  height: 180px;
+  background: linear-gradient(135deg, #eef2ff 0%, #c7d2fe 100%);
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
+.template-preview span {
+  font-size: 3rem;
+}
+
+.template-meta {
+  padding: 22px;
+}
+
+.template-meta h3 {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+}
+
+.template-meta p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.editor-view {
+  display: grid;
+  grid-template-columns: 340px minmax(0, 1fr);
+  gap: 20px;
+  height: calc(100vh - 112px);
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.sidebar-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.tab {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-strong);
+  color: var(--muted);
+}
+
+.tab.active {
+  background: var(--primary);
+  color: white;
+  border-color: transparent;
+}
+
+.sidebar-panel {
+  display: none;
+  gap: 16px;
+}
+
+.sidebar-panel.active {
+  display: flex;
+  flex-direction: column;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.list-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.page-card,
+.component-card,
+.asset-card {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 16px;
+  background: var(--surface);
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.page-card:hover,
+.component-card:hover,
+.asset-card:hover {
+  border-color: rgba(79, 70, 229, 0.3);
+  transform: translateY(-1px);
+}
+
+.component-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.asset-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.selection-panel {
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 16px;
+  background: var(--surface-strong);
+  display: grid;
+  gap: 12px;
+}
+
+.selection-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.selection-meta span:first-child {
+  font-weight: 700;
+}
+
+.control-group {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--surface-strong);
+}
+
+.control-group label {
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.two-column {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.editor-main {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.preview-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+}
+
+.preview-frame {
+  width: 100%;
+  min-height: 680px;
+  border: 1px solid var(--border);
+  border-radius: 26px;
+  background: white;
+}
+
+.canvas-dropzone {
+  position: relative;
+  flex: 1;
+  display: grid;
+  border: 2px dashed rgba(209, 213, 219, 0.9);
+  border-radius: 28px;
+  overflow: hidden;
+}
+
+.canvas-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  color: var(--muted);
+  font-weight: 600;
+  opacity: 0.75;
+}
+
+.breadcrumbs {
+  margin-top: 18px;
+  color: var(--muted);
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(15, 23, 42, 0.35);
+  backdrop-filter: blur(4px);
+  z-index: 50;
+}
+
+.modal-card,
+.cmd-card {
+  width: min(540px, calc(100% - 32px));
+  background: white;
+  padding: 24px;
+  border-radius: 30px;
+  border: 1px solid rgba(209, 213, 219, 0.85);
+  box-shadow: var(--shadow);
+}
+
+.hidden {
+  display: none !important;
+}
+
+.cmd-card input {
+  width: 100%;
+}
+
+.cmd-list {
+  margin-top: 14px;
+  display: grid;
+  gap: 10px;
+}
+
+.cmd-item {
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.cmd-item:hover {
+  background: var(--surface-strong);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+@media (max-width: 1080px) {
+  .editor-view {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .sidebar {
+    max-height: 520px;
+  }
+}
+
+@media (max-width: 720px) {
+  .topbar,
+  .content-area {
+    padding: 20px;
+  }
+
+  .toolbar {
+    flex-wrap: wrap;
+  }
+
+  .template-grid,
+  .component-grid,
+  .asset-grid {
+    grid-template-columns: 1fr;
+  }
+}

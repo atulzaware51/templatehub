@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--
+    public/index.html
+    -----------------
+    Entry point for TemplateHub. Hosts the gallery and editor UI.
+    Loads modern CSS and JavaScript modules to power the app behavior.
+  -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TemplateHub — Visual Website Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand" onclick="app.navigate('home')">
+        <span class="brand-logo">T</span>
+        <div>
+          <strong>TemplateHub</strong>
+          <small>Modern + Classic UI Builder</small>
+        </div>
+      </div>
+
+      <div class="toolbar" id="toolbar">
+        <button class="tool-btn" id="btn-undo" onclick="editor.undo()" disabled>Undo</button>
+        <button class="tool-btn" id="btn-redo" onclick="editor.redo()" disabled>Redo</button>
+        <button class="tool-btn" onclick="editor.togglePreviewMode()" id="btn-preview">Preview</button>
+        <button class="tool-btn" onclick="editor.toggleCommandPalette()">Cmd + K</button>
+        <button class="tool-btn" onclick="app.openSaveModal()">Save</button>
+        <button class="tool-button primary" onclick="editor.exportCode()">Export</button>
+        <button class="tool-btn" id="auth-btn" onclick="app.showAuthModal()">Login</button>
+      </div>
+    </header>
+
+    <main class="content-area">
+      <section id="view-home" class="view active">
+        <div class="home-header">
+          <div>
+            <h1>Select a Template</h1>
+            <p>Start from a ready-made layout or build from scratch with the editor.</p>
+          </div>
+          <div class="home-actions">
+            <button class="btn" onclick="app.createNewProject()">Create New</button>
+            <button class="btn secondary" onclick="app.resetSavedTemplates()">Reset Saved</button>
+          </div>
+        </div>
+        <div id="template-grid" class="template-grid"></div>
+      </section>
+
+      <section id="view-editor" class="view editor-view">
+        <aside class="sidebar">
+          <div class="sidebar-tabs" role="tablist" aria-label="Editor Tabs">
+            <button class="tab active" id="tab-pages" onclick="editor.switchTab('pages')">Pages</button>
+            <button class="tab" id="tab-add" onclick="editor.switchTab('add')">Add</button>
+            <button class="tab" id="tab-design" onclick="editor.switchTab('design')">Design</button>
+            <button class="tab" id="tab-assets" onclick="editor.switchTab('assets')">Assets</button>
+          </div>
+          <div class="sidebar-panel active" id="panel-pages">
+            <div class="section-header">
+              <span>Site Pages</span>
+              <button class="small-btn" onclick="editor.addPage()">+ Page</button>
+            </div>
+            <div id="pages-list" class="list-stack"></div>
+          </div>
+
+          <div class="sidebar-panel" id="panel-add">
+            <div class="section-header"><span>Add Elements</span></div>
+            <div class="component-grid" id="component-grid"></div>
+          </div>
+
+          <div class="sidebar-panel" id="panel-design">
+            <div id="selection-panel" class="selection-panel hidden">
+              <div class="selection-meta">
+                <span id="selected-tag">DIV</span>
+                <span id="selected-uid" class="muted">#none</span>
+              </div>
+              <div class="selection-actions">
+                <button class="small-btn" onclick="editor.saveSelectionAsComponent()">Save</button>
+                <button class="small-btn" onclick="editor.wrapSelection()">Wrap</button>
+                <button class="small-btn danger" onclick="editor.deleteSelection()">Delete</button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label>Typography</label>
+              <select id="inp-font" onchange="editor.updateStyle('fontFamily', this.value)">
+                <option value="Inter">Inter</option>
+                <option value="JetBrains Mono">JetBrains Mono</option>
+                <option value="Georgia, serif">Georgia</option>
+              </select>
+              <div class="two-column">
+                <input type="color" id="inp-color" onchange="editor.updateStyle('color', this.value)" />
+                <input type="number" id="inp-font-size" placeholder="Font size" onchange="editor.updateStyle('fontSize', this.value + 'px')" />
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label>Appearance</label>
+              <div class="two-column">
+                <input type="color" id="inp-bg" onchange="editor.updateStyle('backgroundColor', this.value)" />
+                <input type="color" id="inp-border-color" onchange="editor.updateStyle('borderColor', this.value)" />
+              </div>
+              <div class="two-column">
+                <input type="number" id="inp-border-width" placeholder="Border width" onchange="editor.updateStyle('borderWidth', this.value + 'px')" />
+                <input type="number" id="inp-border-radius" placeholder="Radius" onchange="editor.updateStyle('borderRadius', this.value + 'px')" />
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label>Spacing</label>
+              <div class="two-column">
+                <input type="number" id="inp-padding" placeholder="Padding" onchange="editor.updateStyle('padding', this.value + 'px')" />
+                <input type="number" id="inp-margin" placeholder="Margin" onchange="editor.updateStyle('margin', this.value + 'px')" />
+              </div>
+              <input type="text" id="inp-classes" placeholder="Extra classes" onblur="editor.updateClasses(this.value)" />
+            </div>
+          </div>
+
+          <div class="sidebar-panel" id="panel-assets">
+            <div class="section-header">
+              <span>Assets</span>
+              <button class="small-btn" onclick="document.getElementById('asset-upload').click()">Upload</button>
+            </div>
+            <input type="file" id="asset-upload" class="hidden" accept="image/*" onchange="editor.uploadAsset(this)" />
+            <div id="asset-grid" class="asset-grid"></div>
+          </div>
+        </aside>
+
+        <section class="editor-main">
+          <div class="editor-header">
+            <div>
+              <h2 id="page-title">Editor</h2>
+              <p id="page-path" class="muted">/index.html</p>
+            </div>
+            <div class="page-actions">
+              <button class="btn" onclick="editor.clearPage()">Clear</button>
+              <button class="btn secondary" onclick="editor.autoResponsive()">Auto Responsive</button>
+            </div>
+          </div>
+
+          <div class="preview-toolbar">
+            <div>
+              <span id="preview-status">Ready</span>
+            </div>
+            <div class="breakpoint-buttons">
+              <button class="small-btn" onclick="editor.setPreviewWidth('100%')">Desktop</button>
+              <button class="small-btn" onclick="editor.setPreviewWidth('768px')">Tablet</button>
+              <button class="small-btn" onclick="editor.setPreviewWidth('420px')">Mobile</button>
+            </div>
+          </div>
+
+          <div id="canvas-drop" class="canvas-dropzone" ondragover="event.preventDefault()" ondrop="editor.handleDrop(event)">
+            <iframe id="preview-iframe" class="preview-frame" sandbox="allow-scripts allow-same-origin"></iframe>
+            <div class="canvas-overlay">
+              <span>Drop elements here or click a component to add.</span>
+            </div>
+          </div>
+
+          <div id="breadcrumbs" class="breadcrumbs">Body</div>
+        </section>
+      </section>
+    </main>
+
+    <div id="save-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="save-title">
+      <div class="modal-card">
+        <h3 id="save-title">Save Template</h3>
+        <input id="save-name" type="text" placeholder="Project name" />
+        <div class="modal-actions">
+          <button class="btn secondary" onclick="app.closeSaveModal()">Cancel</button>
+          <button class="btn primary" onclick="app.confirmSave()">Save</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="auth-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+      <div class="modal-card">
+        <h3 id="auth-title">Account</h3>
+        <input id="auth-name" type="text" placeholder="Name (signup)" />
+        <input id="auth-email" type="email" placeholder="Email" />
+        <input id="auth-password" type="password" placeholder="Password" />
+        <div class="modal-actions">
+          <button class="btn secondary" onclick="app.closeAuthModal()">Close</button>
+          <button class="btn" onclick="app.performSignup()">Sign up</button>
+          <button class="btn primary" onclick="app.performLogin()">Log in</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="command-palette" class="modal hidden" role="dialog" aria-modal="true">
+      <div class="cmd-card">
+        <input id="cmd-query" type="text" placeholder="Type a command..." oninput="app.filterCommands()" />
+        <div id="cmd-list" class="cmd-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
